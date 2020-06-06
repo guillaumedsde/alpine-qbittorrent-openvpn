@@ -1,13 +1,14 @@
 FROM alpine:latest
 
-ARG S6_VERSION=v1.21.8.0
-ARG ARCH=amd64
+ARG S6_VERSION=v2.0.0.1
 
 RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
     && apk add --no-cache \
     openvpn \
     iptables \
-    && wget https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${ARCH}.tar.gz \
+    && ARCH=$(uname -m) \
+    && if [ ${ARCH} == x86_64 ]; then S6_ARCH=amd64; elif [ ${ARCH} == i386 ]; S6_ARCH=X86; else S6_ARCH=${ARCH}; fi \
+    && wget https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${S6_ARCH}.tar.gz \
     && tar xzf s6-overlay-${ARCH}.tar.gz -C / \ 
     && rm s6-overlay-${ARCH}.tar.gz
 

@@ -1,11 +1,12 @@
 #!/bin/sh
 
-if [[ "${TRAVIS_CPU_ARCH}" == arm64 ]]; then
-    BUILD_ARGS="--build-arg aarch64"
-else
-    BUILD_ARGS="--build-arg ${TRAVIS_CPU_ARCH}"
-fi
-
-docker build -t ${DOCKER_USERNAME}/alpine-qbittorrent-openvpn:latest .
+# login to dockerhub registry
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-docker push ${DOCKER_USERNAME}/alpine-qbittorrent-openvpn
+
+TAG="${TRAVIS_TAG:-latest}"
+docker buildx build \
+    --progress plain \
+    --platform=linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le \
+    -t ${DOCKER_USERNAME}/alpine-qbittorrent-openvpn:${TAG} \
+    --push \
+    .
