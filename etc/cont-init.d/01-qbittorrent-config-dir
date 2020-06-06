@@ -1,4 +1,6 @@
 #!/usr/bin/with-contenv sh
 
+# create configuration directory
 s6-mkdir -p /config
+# set permissions on configuration directory
 fix-attrs /config true ${PUID}:${PGID} 0600 0700

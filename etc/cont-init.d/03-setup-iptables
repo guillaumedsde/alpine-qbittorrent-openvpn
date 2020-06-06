@@ -1,11 +1,14 @@
 #!/usr/bin/with-contenv sh
 
+# extract docker network CIDR notation
 DOCKER_CIDR=$(ip -o -f inet addr show | awk '/scope global/ {print $4}')
 
+# extract VPN protocol, host and port from configuration
 VPN_PROTO=$(awk '/proto / { print $2 }' "${OPENVPN_CONFIG_FILE}")
 VPN_HOST=$(awk '/remote / { print $2 }' "${OPENVPN_CONFIG_FILE}")
 VPN_PORT=$(awk '/remote / { print $3 }' "${OPENVPN_CONFIG_FILE}")
 
+# Check that VPN information was sucessfully extracted from configuration
 if [[ -z "${VPN_PROTO}" || -z "${VPN_HOST}" || -z "${VPN_PORT}" ]]; then
     echo "One of the following variables could not be detected in the VPN configuration:
     VPN_PROTO:  $VPN_PROTO
@@ -15,21 +18,27 @@ if [[ -z "${VPN_PROTO}" || -z "${VPN_HOST}" || -z "${VPN_PORT}" ]]; then
     exit 1
 fi
 
-echo "nameserver ${DNS}" >/etc/resolv.conf
-
+# reset iptables
 iptables --flush
 iptables --delete-chain
 iptables -t nat --flush
 iptables -t nat --delete-chain
+# drop by default
 iptables -P OUTPUT DROP
+# allow localhost traffic
 iptables -A INPUT -j ACCEPT -i lo
 iptables -A OUTPUT -j ACCEPT -o lo
-iptables -A OUTPUT -p udp -m udp --dport 53 -j ACCEPT
+# allow DNS traffic outside VPN tunnel with given DNS resolver only on UDP and DNS port
+iptables -A OUTPUT -d ${DNS} -p udp -m udp --dport 53 -j ACCEPT
+# allow LAN traffic
 iptables -A INPUT --src ${LAN} -j ACCEPT -i eth+
 iptables -A OUTPUT -d ${LAN} -j ACCEPT -o eth+
+# allow traffic with other containers on docker network
 iptables -A INPUT --src ${DOCKER_CIDR} -j ACCEPT -i eth+
 iptables -A OUTPUT -d ${DOCKER_CIDR} -j ACCEPT -o eth+
+# allow traffic with VPN host over VPN's port and with VPN's protocol
 iptables -A OUTPUT -j ACCEPT -d ${VPN_HOST} -o eth+ -p ${VPN_PROTO} -m ${VPN_PROTO} --dport ${VPN_PORT}
 iptables -A INPUT -j ACCEPT -s ${VPN_HOST} -i eth+ -p ${VPN_PROTO} -m ${VPN_PROTO} --sport ${VPN_PORT}
+# allow traffic through VPN tunnel interface
 iptables -A INPUT -j ACCEPT -i tun+
 iptables -A OUTPUT -j ACCEPT -o tun+
