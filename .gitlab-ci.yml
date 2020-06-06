@@ -3,11 +3,16 @@ stages:
 
 docker-build-master:
   # Official docker image.
-  image: docker:latest
+  image: "docker:latest"
   stage: build
   services:
-    - docker:dind
+    - name: "docker:dind"
+      command: ["--experimental"] # Enable experimental features in Docker server
   before_script:
+    # Enable experimental features in Docker client
+    - mkdir $HOME/.docker
+    - "echo -e '{\n  \"experimental\": \"enabled\"\n}' | tee $HOME/.docker/config.json"
+    - docker version
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
   script:
     - docker buildx build --progress plain --platform=linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:latest --push .
