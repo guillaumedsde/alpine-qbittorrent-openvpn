@@ -1,0 +1,17 @@
+language: ruby
+
+arch:
+  - amd64
+  - arm64
+  - ppc64le
+  # not supported by s6 overlay
+  # - s390x
+
+os: linux
+
+services:
+  - docker
+
+script:
+  - chmod +x ./build.sh
+  - ./build.sh
