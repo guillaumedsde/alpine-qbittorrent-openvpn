@@ -18,6 +18,7 @@ ENV QBT_PROFILE=/config \
     QBT_WEBUI_PORT=8080 \
     TUN=/dev/net/tun \
     LAN=192.168.0.0/24 \
+    DOCKER_CIDR=172.17.0.0/16 \
     DNS=1.1.1.1 \
     PUID=1000 \
     PGID=1000 \
