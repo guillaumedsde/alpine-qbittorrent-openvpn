@@ -5,11 +5,12 @@ s6-mkdir -p /dev/net
 if [ ! -c ${TUN} ]; then
     mknod ${TUN} c 10 200
 fi
-chmod 0666 ${TUN}
+chmod 666 ${TUN}
 
 # write credentials to file
-echo "${OPENVPN_USERNAME}" >${CREDENTIALS_FILE}
-echo "${OPENVPN_PASSWORD}" >>${CREDENTIALS_FILE}
+s6-mkdir -p $(dirname ${CREDENTIALS_FILE})
+echo ${OPENVPN_USERNAME} >${CREDENTIALS_FILE}
+echo ${OPENVPN_PASSWORD} >>${CREDENTIALS_FILE}
 chmod 600 ${CREDENTIALS_FILE}
 
 # set given DNS
