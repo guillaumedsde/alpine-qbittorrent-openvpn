@@ -21,8 +21,9 @@ ENV QBT_PROFILE=/config \
     DNS=1.1.1.1 \
     PUID=1000 \
     PGID=1000 \
-    OPENVPN_CONFIG=/config/openvpn/config.ovpn \
-    CREDENTIALS_FILE=/config/openvpn/openvpn-credentials.txt
+    OPENVPN_CONFIG_FILE=/config/openvpn/config.ovpn \
+    CREDENTIALS_FILE=/config/openvpn/openvpn-credentials.txt \
+    S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
 
 ENTRYPOINT ["/init"]

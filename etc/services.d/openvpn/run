@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv sh
 
 exec openvpn \
-    --config ${OPENVPN_CONFIG} \
+    --config ${OPENVPN_CONFIG_FILE} \
     --auth-user-pass ${CREDENTIALS_FILE} \
     --pull-filter ignore "DNS" \
     --dhcp-option DNS ${DNS} \

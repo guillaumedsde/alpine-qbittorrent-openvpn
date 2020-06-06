@@ -13,3 +13,29 @@ echo "${OPENVPN_PASSWORD}" >>${CREDENTIALS_FILE}
 chmod 600 ${CREDENTIALS_FILE}
 
 echo "nameserver ${DNS}" >/etc/resolv.conf
+
+if [[ "${OPENVPN_PROVIDER}" == "**None**" ]] || [[ -z "${OPENVPN_PROVIDER-}" ]]; then
+    echo "OpenVPN provider not set. Using configuration at ${OPENVPN_CONFIG_FILE}"
+    exit 0
+fi
+
+echo "Trying to use OpenVPN provider: ${OPENVPN_PROVIDER}"
+
+lowercase_openvpn_provider=$(echo "${OPENVPN_PROVIDER}" | awk '{print tolower($0)}')
+VPN_PROVIDER_CONFIGS="https://raw.githubusercontent.com/haugene/docker-transmission-openvpn/master/openvpn/${lowercase_openvpn_provider}"
+
+if [[ -n "${OPENVPN_CONFIG}" ]]; then
+    OPENVPN_CONFIG_URL="${VPN_PROVIDER_CONFIGS}/${OPENVPN_CONFIG}.ovpn"
+else
+    echo "No VPN configuration provided. Using default."
+    OPENVPN_CONFIG_URL="${VPN_PROVIDER_CONFIGS}/default.ovpn"
+fi
+
+wget ${OPENVPN_CONFIG_URL} -O ${OPENVPN_CONFIG_FILE}
+
+if [ $? -ne 0 ]; then
+    echo "ERROR: Could not find OpenVPN configuration for provider ${OPENVPN_PROVIDER} at ${OPENVPN_CONFIG_URL}"
+    exit 1
+else
+    echo "Found OpenVPN configuration: ${OPENVPN_CONFIG_FILE} for provider ${OPENVPN_PROVIDER} at ${OPENVPN_CONFIG_URL} using it"
+fi
