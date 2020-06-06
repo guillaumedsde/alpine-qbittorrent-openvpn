@@ -7,24 +7,24 @@ until ifconfig | grep tun | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-0
     sleep 0.5
 done
 
-TUN_DEVICE=$(ip -o link show | awk -F': ' '{print $2}' | grep tun)
+# TUN_DEVICE=$(ip -o link show | awk -F': ' '{print $2}' | grep tun)
 
-if [ -e "$CONFIG_FILE" ]; then
-    grep -q 'ConnectionInterface' "$CONFIG_FILE"
-    # if Connection Interface line exists
-    if grep -q 'ConnectionInterface' "$CONFIG_FILE"; then
-        # Set connection interface to the VPN's
-        sed -i -E "s/^.*\b(ConnectionInterface)\b.*$/ConnectionInterface=${TUN_DEVICE}/" "$CONFIG_FILE"
-    else
-        # add the line for configuring interface to the qBittorrent config file
-        echo "ConnectionInterface=${TUN_DEVICE}" >>"$CONFIG_FILE"
-    fi
-else
-    # add the line for configuring interface to the qBittorrent config file
-    echo "ConnectionInterface=${TUN_DEVICE}" >"$CONFIG_FILE"
+# if [ -e "$CONFIG_FILE" ]; then
+#     grep -q 'ConnectionInterface' "$CONFIG_FILE"
+#     # if Connection Interface line exists
+#     if grep -q 'ConnectionInterface' "$CONFIG_FILE"; then
+#         # Set connection interface to the VPN's
+#         sed -i -E "s/^.*\b(ConnectionInterface)\b.*$/ConnectionInterface=${TUN_DEVICE}/" "$CONFIG_FILE"
+#     else
+#         # add the line for configuring interface to the qBittorrent config file
+#         echo "ConnectionInterface=${TUN_DEVICE}" >>"$CONFIG_FILE"
+#     fi
+# else
+#     # add the line for configuring interface to the qBittorrent config file
+#     echo "ConnectionInterface=${TUN_DEVICE}" >"$CONFIG_FILE"
 
-fi
+# fi
 
-chown ${PUID}:${PGID} $CONFIG_FILE
+# chown ${PUID}:${PGID} $CONFIG_FILE
 
 exec s6-setuidgid ${PUID}:${PGID} qbittorrent-nox
