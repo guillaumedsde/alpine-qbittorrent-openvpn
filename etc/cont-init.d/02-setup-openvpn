@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv sh
 
 # create TUN device
-mkdir -p /dev/net
+s6-mkdir -p /dev/net
 if [ ! -c ${TUN} ]; then
     mknod ${TUN} c 10 200
 fi
@@ -12,18 +12,24 @@ echo "${OPENVPN_USERNAME}" >${CREDENTIALS_FILE}
 echo "${OPENVPN_PASSWORD}" >>${CREDENTIALS_FILE}
 chmod 600 ${CREDENTIALS_FILE}
 
+# set given DNS
 echo "nameserver ${DNS}" >/etc/resolv.conf
 
+# check if VPN provider was defined
 if [[ "${OPENVPN_PROVIDER}" == "**None**" ]] || [[ -z "${OPENVPN_PROVIDER-}" ]]; then
     echo "OpenVPN provider not set. Using configuration at ${OPENVPN_CONFIG_FILE}"
+    # if not fallback to given VPN configuration
     exit 0
 fi
 
 echo "Trying to use OpenVPN provider: ${OPENVPN_PROVIDER}"
 
+# build base URL for downloading VPN configuration
 lowercase_openvpn_provider=$(echo "${OPENVPN_PROVIDER}" | awk '{print tolower($0)}')
 VPN_PROVIDER_CONFIGS="https://raw.githubusercontent.com/haugene/docker-transmission-openvpn/master/openvpn/${lowercase_openvpn_provider}"
 
+# determine which configuration from the provider we are going to use
+# NOTE: some providers have a "default.ovpn", other do not
 if [[ -n "${OPENVPN_CONFIG}" ]]; then
     OPENVPN_CONFIG_URL="${VPN_PROVIDER_CONFIGS}/${OPENVPN_CONFIG}.ovpn"
 else
@@ -31,8 +37,10 @@ else
     OPENVPN_CONFIG_URL="${VPN_PROVIDER_CONFIGS}/default.ovpn"
 fi
 
+# get the provider's configuration
 wget ${OPENVPN_CONFIG_URL} -O ${OPENVPN_CONFIG_FILE}
 
+# verify the configuration was successfully downloaded
 if [ $? -ne 0 ]; then
     echo "ERROR: Could not find OpenVPN configuration for provider ${OPENVPN_PROVIDER} at ${OPENVPN_CONFIG_URL}"
     exit 1
