@@ -8,7 +8,7 @@ RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbit
     iptables \
     && ARCH=$(uname -m) \
     && echo building for ${ARCH} \
-    && if [ ${ARCH} == x86_64 ]; then S6_ARCH=amd64; elif [ ${ARCH} == i386 ]; then S6_ARCH=X86; else S6_ARCH=${ARCH}; fi \
+    && if [ ${ARCH} == x86_64 ]; then S6_ARCH=amd64; elif [ ${ARCH} == i386 ]; then S6_ARCH=X86; elif [ ${ARCH} == armv7* ]; then S6_ARCH=arm; elif [ ${ARCH} == armv6* ]; then S6_ARCH=arm; else S6_ARCH=${ARCH}; fi \
     && echo using architecture ${S6_ARCH} for S6 Overlay \
     && wget https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${S6_ARCH}.tar.gz \
     && tar xzf s6-overlay-${S6_ARCH}.tar.gz -C / \ 
