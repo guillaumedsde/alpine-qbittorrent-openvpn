@@ -1,0 +1,26 @@
+#!/usr/bin/with-contenv sh
+
+DOCKER_CIDR=$(ip -o -f inet addr show | awk '/scope global/ {print $4}')
+
+VPN_PROTO=$(awk '/proto / { print $2 }' "${OPENVPN_CONFIG}")
+VPN_HOST=$(awk '/remote / { print $2 }' "${OPENVPN_CONFIG}")
+VPN_PORT=$(awk '/remote / { print $3 }' "${OPENVPN_CONFIG}")
+
+echo "nameserver ${DNS}" >/etc/resolv.conf
+
+iptables --flush
+iptables --delete-chain
+iptables -t nat --flush
+iptables -t nat --delete-chain
+iptables -P OUTPUT DROP
+iptables -A INPUT -j ACCEPT -i lo
+iptables -A OUTPUT -j ACCEPT -o lo
+iptables -A OUTPUT -p udp -m udp --dport 53 -j ACCEPT
+iptables -A INPUT --src ${LAN} -j ACCEPT -i eth+
+iptables -A OUTPUT -d ${LAN} -j ACCEPT -o eth+
+iptables -A INPUT --src ${DOCKER_CIDR} -j ACCEPT -i eth+
+iptables -A OUTPUT -d ${DOCKER_CIDR} -j ACCEPT -o eth+
+iptables -A OUTPUT -j ACCEPT -d ${VPN_HOST} -o eth+ -p ${VPN_PROTO} -m ${VPN_PROTO} --dport ${VPN_PORT}
+iptables -A INPUT -j ACCEPT -s ${VPN_HOST} -i eth+ -p ${VPN_PROTO} -m ${VPN_PROTO} --sport ${VPN_PORT}
+iptables -A INPUT -j ACCEPT -i tun+
+iptables -A OUTPUT -j ACCEPT -o tun+

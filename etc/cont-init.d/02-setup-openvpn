@@ -1,0 +1,15 @@
+#!/usr/bin/with-contenv sh
+
+# create TUN device
+mkdir -p /dev/net
+if [ ! -c ${TUN} ]; then
+    mknod ${TUN} c 10 200
+fi
+chmod 0666 ${TUN}
+
+# write credentials to file
+echo "${OPENVPN_USERNAME}" >${CREDENTIALS_FILE}
+echo "${OPENVPN_PASSWORD}" >>${CREDENTIALS_FILE}
+chmod 600 ${CREDENTIALS_FILE}
+
+echo "nameserver ${DNS}" >/etc/resolv.conf

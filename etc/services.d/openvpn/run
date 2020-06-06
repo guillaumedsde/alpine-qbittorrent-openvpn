@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv sh
+
+exec openvpn \
+    --config ${OPENVPN_CONFIG} \
+    --auth-user-pass ${CREDENTIALS_FILE} \
+    --pull-filter ignore "DNS" \
+    --dhcp-option DNS ${DNS} \
+    --redirect-gateway def1 bypass-dhcp
+# --route 172.17.0.0 255.255.0.0 net_gateway

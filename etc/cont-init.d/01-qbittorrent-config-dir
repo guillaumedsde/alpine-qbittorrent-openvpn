@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv sh
+
+s6-mkdir -p /config
+fix-attrs /config true ${PUID}:${PGID} 0600 0700
