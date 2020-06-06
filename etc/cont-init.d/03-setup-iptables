@@ -1,7 +1,10 @@
 #!/usr/bin/with-contenv sh
 
 # extract docker network CIDR notation
-DOCKER_CIDR=$(ip -o -f inet addr show | awk '/scope global/ {print $4}')
+DECTECTED_DOCKER_CIDR=$(ip -o -f inet addr show | awk '/scope global/ {print $4}')
+
+# fallback to DOCKER_CIDR if no DECTECTED_DOCKER_CIDR
+DOCKER_CIDR=${DECTECTED_DOCKER_CIDR:-DOCKER_CIDR}
 
 # extract VPN protocol, host and port from configuration
 VPN_PROTO=$(awk '/proto / { print $2 }' "${OPENVPN_CONFIG_FILE}")
