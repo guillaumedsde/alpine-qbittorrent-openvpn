@@ -19,6 +19,10 @@ if [ -e "$CONFIG_FILE" ]; then
         # add the line for configuring interface to the qBittorrent config file
         echo "ConnectionInterface=${TUN_DEVICE}" >>"$CONFIG_FILE"
     fi
+else
+    # add the line for configuring interface to the qBittorrent config file
+    echo "ConnectionInterface=${TUN_DEVICE}" >"$CONFIG_FILE"
+
 fi
 
 chown ${PUID}:${PGID} $CONFIG_FILE
