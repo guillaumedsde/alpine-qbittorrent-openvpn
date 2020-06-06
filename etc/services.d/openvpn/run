@@ -3,7 +3,7 @@
 # launch openvpn
 exec openvpn \
     --config ${OPENVPN_CONFIG_FILE} \
-    --auth-user-pass ${CREDENTIALS_FILE} \ # use the created credentials file for authentication \
-    --pull-filter ignore "DNS" \ # don't use VPN server's DNS configuration \
-    --dhcp-option DNS ${DNS} \ # instead set the one provided \
+    --auth-user-pass ${CREDENTIALS_FILE} \
+    --pull-filter ignore "DNS" \
+    --dhcp-option DNS ${DNS} \
     --redirect-gateway def1 bypass-dhcp
