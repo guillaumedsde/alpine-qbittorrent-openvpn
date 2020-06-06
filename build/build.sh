@@ -10,9 +10,3 @@ docker buildx build \
     -t ${DOCKER_USERNAME}/alpine-qbittorrent-openvpn:${TAG} \
     --push \
     .
-
-curl --verbose -X POST -u "${DOCKER_USERNAME}:${GITHUB_TOKEN}" \
-    -H "Accept: application/vnd.github.everest-preview+json" \
-    -H "Content-Type: application/json" \
-    https://api.github.com/repos/${DOCKER_USERNAME}/alpine-qbittorrent-openvpn/dispatches \
-    --data '{"event_type": "html.preview"}'
