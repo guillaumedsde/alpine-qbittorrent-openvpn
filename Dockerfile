@@ -16,7 +16,7 @@ RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbit
 
 COPY /etc /etc
 
-ENV QBT_PROFILE=/config \
+ENV CONFIG_DIR=/config \
     QBT_SAVE_PATH=/downloads \
     QBT_WEBUI_PORT=8080 \
     TUN=/dev/net/tun \
@@ -29,7 +29,7 @@ ENV QBT_PROFILE=/config \
     CREDENTIALS_FILE=/config/openvpn/openvpn-credentials.txt \
     S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
-HEALTHCHECK --interval=10s CMD /etc/healthcheck.sh
+HEALTHCHECK --interval=10s CMD chmod +x /etc/healthcheck.sh && /etc/healthcheck.sh
 
 EXPOSE 8080
 

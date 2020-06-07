@@ -23,7 +23,7 @@ echo "Network is up"
 
 #Service check
 #Expected output is 2 for both checks, 1 for process and 1 for grep
-OPENVPN=$(ps -ef | grep 'openvpn' | wc | awk '{print $1}')
+OPENVPN=$(ps -ef | grep 'openvpn --writepid' | wc | awk '{print $1}')
 QBITTORRENT=$(ps -ef | grep 'qbittorrent-nox' | wc | awk '{print $1}')
 
 if [[ ${OPENVPN} -ne 2 ]]; then
