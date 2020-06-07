@@ -1,2 +1,5 @@
-config/
-build/
+# Ignore everything
+**
+
+# Allow files and directories
+!/etc
