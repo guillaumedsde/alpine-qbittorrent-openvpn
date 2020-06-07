@@ -1,11 +1,9 @@
-image: docker:latest
-
 stages:
   - build
 
 variables:
-  DOCKER_TLS_CERTDIR: "/certs"
-  DOCKER_HOST: tcp://docker:2375
+  # DOCKER_TLS_CERTDIR: "/certs"
+  # DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
   DOCKER_BUILDKIT: 1
   DOCKER_CLI_EXPERIMENTAL: enabled
@@ -15,7 +13,7 @@ variables:
 
 docker-build-master:
   # Official docker image.
-  image: "docker:latest"
+  image: docker:latest
   stage: build
   services:
     - name: "docker:dind"
