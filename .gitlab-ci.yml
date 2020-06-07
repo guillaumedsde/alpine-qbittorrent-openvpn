@@ -2,21 +2,19 @@ stages:
   - build
   - deploy
 
-variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_BUILDKIT: 1
-  DOCKER_CLI_EXPERIMENTAL: enabled
-  BUILDX_URL: https://github.com/docker/buildx/releases/latest/download/buildx-v0.4.1.linux-amd64
-  BUILDX_BUILDER: builder
-  BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
-
 build-containers:
-  # Official docker image.
   image: docker:latest
   stage: build
   services:
     - name: "docker:dind"
       command: ["--experimental"]
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
+    DOCKER_CLI_EXPERIMENTAL: enabled
+    BUILDX_URL: https://github.com/docker/buildx/releases/latest/download/buildx-v0.4.1.linux-amd64
+    BUILDX_BUILDER: builder
+    BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
   before_script:
     - /bin/sh build/prepare_builder.sh
   script:
@@ -33,7 +31,6 @@ build-containers:
 # the 'pages' job will deploy and build your site to the 'public' path
 dockerhub-readme:
   stage: deploy
-  # requiring the environment of NodeJS 10
   variables:
     README_PATH: ./README.md
   image:
@@ -42,7 +39,11 @@ dockerhub-readme:
   script:
     - node /app/index.js
   only:
-    - master # this job will affect only the 'master' branch
+    refs:
+      - master
+    changes:
+      - README.md
+      - .gitlab-ci.yml
 
 # the 'pages' job will deploy and build your site to the 'public' path
 pages:
@@ -64,4 +65,8 @@ pages:
       - public
     expire_in: 1 week
   only:
-    - master # this job will affect only the 'master' branch
+    refs:
+      - master
+    changes:
+      - README.md
+      - .gitlab-ci.yml
