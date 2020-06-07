@@ -2,8 +2,6 @@ stages:
   - build
 
 variables:
-  # DOCKER_TLS_CERTDIR: "/certs"
-  # DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
   DOCKER_BUILDKIT: 1
   DOCKER_CLI_EXPERIMENTAL: enabled
@@ -11,13 +9,13 @@ variables:
   BUILDX_BUILDER: builder
   BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
 
-docker-build-master:
+build-containers:
   # Official docker image.
   image: docker:latest
   stage: build
   services:
     - name: "docker:dind"
-      command: ["--experimental"] # Enable experimental features in Docker server
+      command: ["--experimental"]
   before_script:
     - mkdir -p $HOME/.docker/cli-plugins/
     - wget -O $HOME/.docker/cli-plugins/docker-buildx $BUILDX_URL
@@ -29,34 +27,6 @@ docker-build-master:
     - docker buildx ls
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
   script:
-    - if [ "${CI_COMMIT_BRANCH}" == master ]; then export TAGS="-t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:latest"; fi
-    - if [ ! "${CI_COMMIT_TAG}" ]; then export TAGS="${TAGS} -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${CI_COMMIT_TAG}"; fi
-    - export TAGS="${TAGS} -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${CI_COMMIT_REF_SLUG}"
-    - docker buildx build --platform=${BUILDX_PLATFORM} ${TAGS} --push .
-# docker-build-master:
-#   # Official docker image.
-#   image: docker:latest
-#   stage: build
-#   services:
-#     - docker:dind
-#   before_script:
-#     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-#   script:
-#     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-#     - docker push "$CI_REGISTRY_IMAGE"
-#   only:
-#     - master
-
-# docker-build:
-#   # Official docker image.
-#   image: docker:latest
-#   stage: build
-#   services:
-#     - docker:dind
-#   before_script:
-#     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-#   script:
-#     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
-#     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
-#   except:
-#     - master
+    - docker buildx build --platform=${BUILDX_PLATFORM} -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${CI_COMMIT_REF_SLUG} -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:latest --push .
+  only:
+    - master
