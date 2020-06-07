@@ -14,6 +14,14 @@ The container is built automatically whenever the Alpine container is updated, t
 This container is based on an [Alpine Linux](https://hub.docker.com/_/alpine) and uses the [S6-overlay](https://github.com/just-containers/s6-overlay) for starting setting up the firewall, VPN tunnel and lastly starting qBittorrent.
 The image aims to be safe, small and generally minimal by installing as little dependencies as possible and running qBittorrent as an unprivileged user (soon the OpenVPN client).
 
+## ✔️ Features summary
+
+- 🤏 Small Alpine-based Docker Image with minimal software installed and as few Docker layers as possible
+- 🛡️ Minimal software dependencies installed
+- 🖥️ Built for many platforms
+- 🚇 Compatible with most OpenVPN providers
+- 🛡️ Runs as unprivileged user with minimal permissions
+
 ## 🏁 How to Run
 
 ### `docker run`
