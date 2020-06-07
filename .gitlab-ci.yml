@@ -31,6 +31,18 @@ build-containers:
       - build/*
 
 # the 'pages' job will deploy and build your site to the 'public' path
+dockerhub-readme:
+  stage: deploy
+  # requiring the environment of NodeJS 10
+  image:
+    name: sheogorath/readme-to-dockerhub:latest
+    entrypoint: ["node"]
+  script:
+    - /app/index.js
+  only:
+    - master # this job will affect only the 'master' branch
+
+# the 'pages' job will deploy and build your site to the 'public' path
 pages:
   stage: deploy
   # requiring the environment of NodeJS 10
