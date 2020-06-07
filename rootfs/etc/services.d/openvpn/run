@@ -1,8 +1,12 @@
 #!/usr/bin/with-contenv sh
 
+id openvpn
+ls -al ${CREDENTIALS_FILE}
+
 # launch openvpn
-exec openvpn \
+exec s6-setuidgid $(id -u openvpn):$(id -g openvpn) openvpn \
     --writepid /var/run/openvpn/pid \
+    --iproute /usr/sbin/ip-su \
     --dev tun0 --persist-tun \
     --config ${OPENVPN_CONFIG_FILE} \
     --auth-user-pass ${CREDENTIALS_FILE} \

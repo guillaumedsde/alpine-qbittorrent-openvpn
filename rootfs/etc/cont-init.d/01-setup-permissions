@@ -4,3 +4,6 @@
 s6-mkdir -p ${CONFIG_DIR}
 # set permissions on configuration directory
 fix-attrs ${CONFIG_DIR} true ${PUID}:${PGID} 0600 0700
+# set permissions on copied scripts
+chmod 755 /usr/sbin/healthcheck.sh
+chmod 755 /usr/sbin/ip-su

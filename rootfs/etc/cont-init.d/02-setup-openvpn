@@ -10,7 +10,7 @@ chmod 666 ${TUN}
 s6-mkdir -p \
     '/var/log/openvpn' \
     '/var/run/openvpn'
-chown -fR ${PUID}:${PGID} \
+chown -fR openvpn:openvpn \
     '/var/log/openvpn' \
     '/var/run/openvpn' || :
 chmod -fR a=,ug+rwX \
@@ -18,13 +18,15 @@ chmod -fR a=,ug+rwX \
     '/var/run/openvpn' || :
 openvpn \
     --mktun --dev 'tun0' --dev-type 'tun' \
-    --user ${PUID} --group ${PGID} #>'/dev/null'
+    --user openvpn --group ${PGID}
 
 # write credentials to file
 s6-mkdir -p $(dirname ${CREDENTIALS_FILE})
 echo ${OPENVPN_USERNAME} >${CREDENTIALS_FILE}
 echo ${OPENVPN_PASSWORD} >>${CREDENTIALS_FILE}
-chmod 600 ${CREDENTIALS_FILE}
+
+chown openvpn:openvpn ${CREDENTIALS_FILE}
+chmod 0600 ${CREDENTIALS_FILE}
 
 # set given DNS
 echo "nameserver ${DNS}" >/etc/resolv.conf
@@ -61,3 +63,6 @@ if [ $? -ne 0 ]; then
 else
     echo "Found OpenVPN configuration: ${OPENVPN_CONFIG_FILE} for provider ${OPENVPN_PROVIDER} at ${OPENVPN_CONFIG_URL} using it"
 fi
+
+chown openvpn:openvpn ${OPENVPN_CONFIG_FILE}
+chmod 0600 ${OPENVPN_CONFIG_FILE}

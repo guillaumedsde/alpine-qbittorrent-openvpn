@@ -12,11 +12,12 @@ This repository contains the code to build a docker container with the [qBittorr
 The container is built automatically whenever the Alpine container is updated, the final image is available on the [docker hub](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn).
 
 This container is based on an [Alpine Linux](https://hub.docker.com/_/alpine) and uses the [S6-overlay](https://github.com/just-containers/s6-overlay) for starting setting up the firewall, VPN tunnel and lastly starting qBittorrent.
-The image aims to be safe, small and generally minimal by installing as little dependencies as possible and running qBittorrent as an unprivileged user (soon the OpenVPN client).
+The image aims to be safe, small and generally minimal by installing as little dependencies as possible and running qBittorrent and OpenVPN as different unprivileged users.
 
 ## ✔️ Features summary
 
-- 🤏 Small Alpine-based Docker Image with minimal software installed and as few Docker layers as possible
+- 🏔️ Alpine Linux small and secure base Docker image
+- 🤏 Minimal installed software and as few Docker layers as possible
 - 🛡️ Minimal software dependencies installed
 - 🖥️ Built for many platforms
 - 🚇 Compatible with most OpenVPN providers
@@ -76,7 +77,7 @@ This container is built for many hardware platforms (yes, even ppc64le whoever u
 - linux/arm64
 - linux/ppc64le
 
-All you have to do is use a recent version of docker and it will pull the appropriate image
+All you have to do is use a recent version of docker and it will pull the appropriate version of the image [guillaumedsde/alpine-qbittorrent-openvpn](https://hub.docker.com/repository/docker/guillaumedsde/alpine-qbittorrent-openvpn) from the docker hub.
 
 ## 🚇 OpenVPN configuration
 
@@ -94,13 +95,14 @@ If your provider is not in the supported list, you can mount your `.ovpn` file a
 
 This image has a couple of limitations:
 
-- **OpenVPN runs as privileged user** I am looking into running it as an unprivileged user to make the container more secure
 - **No IPv6 support** I have not installed iptables for IPv6 as such the firewall kill switch will probably not work with IPv6 (I have not tested it) if you need it, [file an issue](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/new/choose) and I'll look into it when I have some time
-- **Automatic restarts** I am looking into this to make the container more resilient
+- **Automatic restarts** I am looking into improving this to make the container more resilient
 
 ## 🙏 Credits
 
 A couple of projects really helped me out while developing this container:
 
-- [0x022b/s6-openvpn](https://github.com/0x022b/s6-openvpn) for figuring out how the S6 overlay works
-- [haugene/docker-transmission-openvpn](https://github.com/haugene/docker-transmission-openvpn) for general inspiration for the project and specifically, the OpenVPN configurations and the healthcheck script adapted in this repository
+- 🍻 [0x022b/s6-openvpn](https://github.com/0x022b/s6-openvpn) for figuring out how the S6 overlay works, and for most of the code to run OpenVPN as an unprivileged user
+- 🍻 [haugene/docker-transmission-openvpn](https://github.com/haugene/docker-transmission-openvpn) for general inspiration for the project and specifically, the OpenVPN configurations and the healthcheck script adapted in this repository
+- 🏔️ [Alpine Linux](https://alpinelinux.org/) an awesome lightweight secure linux distribution used as the base for this container
+- 🐋 The [Docker](https://github.com/docker) project (of course)
