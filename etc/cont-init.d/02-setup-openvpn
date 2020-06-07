@@ -7,6 +7,19 @@ if [ ! -c ${TUN} ]; then
 fi
 chmod 666 ${TUN}
 
+s6-mkdir -p \
+    '/var/log/openvpn' \
+    '/var/run/openvpn'
+chown -fR ${PUID}:${PGID} \
+    '/var/log/openvpn' \
+    '/var/run/openvpn' || :
+chmod -fR a=,ug+rwX \
+    '/var/log/openvpn' \
+    '/var/run/openvpn' || :
+openvpn \
+    --mktun --dev 'tun0' --dev-type 'tun' \
+    --user ${PUID} --group ${PGID} #>'/dev/null'
+
 # write credentials to file
 s6-mkdir -p $(dirname ${CREDENTIALS_FILE})
 echo ${OPENVPN_USERNAME} >${CREDENTIALS_FILE}

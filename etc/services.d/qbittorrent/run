@@ -1,6 +1,7 @@
 #!/usr/bin/with-contenv sh
 
-CONFIG_FILE=${QBT_PROFILE}/qBittorrent/config/qBittorrent.conf
+CONFIG_FILE=${CONFIG_DIR}/qBittorrent/config/qBittorrent.conf
+export QBT_PROFILE=${CONFIG_DIR}
 
 # wait for VPN connection
 until ifconfig | grep tun | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00"; do

@@ -2,8 +2,11 @@
 
 # launch openvpn
 exec openvpn \
+    --writepid /var/run/openvpn/pid \
+    --dev tun0 --persist-tun \
     --config ${OPENVPN_CONFIG_FILE} \
     --auth-user-pass ${CREDENTIALS_FILE} \
+    --auth-nocache \
     --pull-filter ignore "DNS" \
     --dhcp-option DNS ${DNS} \
     --redirect-gateway def1 bypass-dhcp
