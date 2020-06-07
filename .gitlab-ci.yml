@@ -27,3 +27,4 @@ build-containers:
       - Dockerfile
       - etc/*
       - .gitlab-ci.yml
+      - build/*
