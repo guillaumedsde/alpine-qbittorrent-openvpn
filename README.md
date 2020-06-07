@@ -1,7 +1,6 @@
 # [🐋 Alpine qBittorrent OpenVPN](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn)
 
-[![Travis (.org)](https://img.shields.io/travis/guillaumedsde/alpine-qbittorrent-openvpn)](https://travis-ci.org/github/guillaumedsde/alpine-qbittorrent-openvpn)
-
+[![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
 
 This repository contains the code to build a docker container with the [qBittorrent](https://www.qbittorrent.org/) torrent client with all traffic routed through an OpenVPN tunnel with firewall rules preventing traffic outside of the tunnel.
