@@ -7,4 +7,13 @@ until ifconfig | grep tun | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-0
     sleep 0.5
 done
 
+# drop rule allowing DNS traffic outside VPN tunnel
+iptables -D OUTPUT -d ${DNS} -p udp -m udp --dport 53 -j ACCEPT
+
+# verify the iptables rule was dropped
+if [ $? -ne 0 ]; then
+    echo "ERROR: could not drop iptables rule allowing DNS traffic"
+    exit 1
+fi
+
 exec s6-setuidgid ${PUID}:${PGID} qbittorrent-nox

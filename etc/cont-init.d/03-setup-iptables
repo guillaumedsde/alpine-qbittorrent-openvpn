@@ -32,6 +32,7 @@ iptables -P OUTPUT DROP
 iptables -A INPUT -j ACCEPT -i lo
 iptables -A OUTPUT -j ACCEPT -o lo
 # allow DNS traffic outside VPN tunnel with given DNS resolver only on UDP and DNS port
+# NOTE: this rule is dropped before starting qbittorrent
 iptables -A OUTPUT -d ${DNS} -p udp -m udp --dport 53 -j ACCEPT
 # allow LAN traffic
 iptables -A INPUT --src ${LAN} -j ACCEPT -i eth+

@@ -95,7 +95,6 @@ If your provider is not in the supported list, you can mount your `.ovpn` file a
 This image has a couple of limitations:
 
 - **No IPv6 support** I have not installed iptables for IPv6 as such the firewall kill switch will probably not work with IPv6 (I have not tested it) if you need it, [file an issue](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/new/choose) and I'll look into it when I have some time
-- **DNS Leak** the firewall rules allow VPN traffic outside of the VPN tunnel, this is initally needed to resolve the hostname for the VPN host from the configuration, I am working on a fix that will prevent non-tunneled DNS traffic once the VPN tunnel is started
 - **Healthcheck and automatic restarts** I am looking into this to make the container more resilient
 
 ## 🙏 Credits
