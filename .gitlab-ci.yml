@@ -34,11 +34,13 @@ build-containers:
 dockerhub-readme:
   stage: deploy
   # requiring the environment of NodeJS 10
+  variables:
+    README_PATH: ./README.md
   image:
     name: sheogorath/readme-to-dockerhub:latest
-    entrypoint: ["node"]
+    entrypoint: [""]
   script:
-    - /app/index.js
+    - node /app/index.js
   only:
     - master # this job will affect only the 'master' branch
 
