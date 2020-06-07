@@ -94,12 +94,13 @@ If your provider is not in the supported list, you can mount your `.ovpn` file a
 
 This image has a couple of limitations:
 
+- **OpenVPN runs as privileged user** I am looking into running it as an unprivileged user to make the container more secure
 - **No IPv6 support** I have not installed iptables for IPv6 as such the firewall kill switch will probably not work with IPv6 (I have not tested it) if you need it, [file an issue](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/new/choose) and I'll look into it when I have some time
-- **Healthcheck and automatic restarts** I am looking into this to make the container more resilient
+- **Automatic restarts** I am looking into this to make the container more resilient
 
 ## 🙏 Credits
 
 A couple of projects really helped me out while developing this container:
 
 - [0x022b/s6-openvpn](https://github.com/0x022b/s6-openvpn) for figuring out how the S6 overlay works
-- [haugene/docker-transmission-openvpn](https://github.com/haugene/docker-transmission-openvpn) for general inspiration for the project and specifically, the OpenVPN configurations
+- [haugene/docker-transmission-openvpn](https://github.com/haugene/docker-transmission-openvpn) for general inspiration for the project and specifically, the OpenVPN configurations and the healthcheck script adapted in this repository

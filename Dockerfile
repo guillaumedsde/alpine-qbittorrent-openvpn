@@ -29,5 +29,8 @@ ENV QBT_PROFILE=/config \
     CREDENTIALS_FILE=/config/openvpn/openvpn-credentials.txt \
     S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
+HEALTHCHECK --interval=10s CMD /etc/healthcheck.sh
+
+EXPOSE 8080
 
 ENTRYPOINT ["/init"]
