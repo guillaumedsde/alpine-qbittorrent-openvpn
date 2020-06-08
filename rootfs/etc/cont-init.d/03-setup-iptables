@@ -11,6 +11,8 @@ VPN_PROTO=$(awk '/proto / { print $2 }' "${OPENVPN_CONFIG_FILE}")
 VPN_HOST=$(awk '/remote / { print $2 }' "${OPENVPN_CONFIG_FILE}")
 VPN_PORT=$(awk '/remote / { print $3 }' "${OPENVPN_CONFIG_FILE}")
 
+DNS_SERVER=$(sed -n -e 's/^.*nameserver //p' /etc/resolv.conf)
+
 # Check that VPN information was sucessfully extracted from configuration
 if [[ -z "${VPN_PROTO}" || -z "${VPN_HOST}" || -z "${VPN_PORT}" ]]; then
     echo "One of the following variables could not be detected in the VPN configuration:
@@ -32,8 +34,15 @@ iptables -A INPUT -j ACCEPT -i lo
 iptables -A OUTPUT -j ACCEPT -o lo
 
 # allow DNS traffic outside VPN tunnel with given DNS resolver only on UDP and DNS port
-# NOTE: this rule is dropped before starting qbittorrent
-iptables -A OUTPUT -d $(sed -n -e 's/^.*nameserver //p' /etc/resolv.conf) -p udp -m udp --dport 53 -j ACCEPT
+# 127.0.0.11 is the IP of the default docker DNS if it is not set, since the destination port changes on every start
+# I have not yet found an alternative to just allowing all outboung UDP trafffic to this IP
+# see: https://serverfault.com/a/826424
+if [ "${DNS_SERVER}" == "127.0.0.11" ]; then
+    iptables -A OUTPUT -d ${DNS_SERVER} -p udp -m udp -j ACCEPT
+else
+    # NOTE: this rule is dropped before starting qbittorrent
+    iptables -A OUTPUT -d ${DNS_SERVER} -p udp -m udp --dport 53 -j ACCEPT
+fi
 
 # allow LAN traffic
 iptables -A INPUT --src ${LAN} -j ACCEPT -i eth+
