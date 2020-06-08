@@ -104,5 +104,6 @@ A couple of projects really helped me out while developing this container:
 
 - 🍻 [0x022b/s6-openvpn](https://github.com/0x022b/s6-openvpn) for figuring out how the S6 overlay works, and for most of the code to run OpenVPN as an unprivileged user
 - 🍻 [haugene/docker-transmission-openvpn](https://github.com/haugene/docker-transmission-openvpn) for general inspiration for the project and specifically, the OpenVPN configurations and the healthcheck script adapted in this repository
+- 🏁 [s6-overlay](https://github.com/just-containers/s6-overlay) A simple, relatively small yet powerful set of init script for managing processes (especially in docker containers)
 - 🏔️ [Alpine Linux](https://alpinelinux.org/) an awesome lightweight secure linux distribution used as the base for this container
 - 🐋 The [Docker](https://github.com/docker) project (of course)
