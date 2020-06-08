@@ -1,11 +1,13 @@
 # [🐋 Alpine qBittorrent OpenVPN](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn)
 
-[![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
+[![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/guillaumedsde/alpine-qbittorrent-openvpn?label=version)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/releases)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
 [![Docker Pulls](https://img.shields.io/docker/pulls/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
 [![GitHub stars](https://img.shields.io/github/stars/guillaumedsde/alpine-qbittorrent-openvpn?label=Github%20stars)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn)
-[![Docker Stars](https://img.shields.io/docker/stars/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
 [![GitHub watchers](https://img.shields.io/github/watchers/guillaumedsde/alpine-qbittorrent-openvpn?label=Github%20Watchers)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn)
+[![Docker Stars](https://img.shields.io/docker/stars/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
 [![GitHub](https://img.shields.io/github/license/guillaumedsde/alpine-qbittorrent-openvpn)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/blob/master/LICENSE.md)
 
 This repository contains the code to build a docker container with the [qBittorrent](https://www.qbittorrent.org/) torrent client with all traffic routed through an OpenVPN tunnel with firewall rules preventing traffic outside of the tunnel.
