@@ -18,7 +18,7 @@ chmod -fR a=,ug+rwX \
     '/var/run/openvpn' || :
 openvpn \
     --mktun --dev 'tun0' --dev-type 'tun' \
-    --user openvpn --group ${PGID}
+    --user openvpn --group openvpn
 
 # write credentials to file
 s6-mkdir -p $(dirname ${CREDENTIALS_FILE})
@@ -27,9 +27,6 @@ echo ${OPENVPN_PASSWORD} >>${CREDENTIALS_FILE}
 
 chown openvpn:openvpn ${CREDENTIALS_FILE}
 chmod 0600 ${CREDENTIALS_FILE}
-
-# set given DNS
-echo "nameserver ${DNS}" >/etc/resolv.conf
 
 # check if VPN provider was defined
 if [[ "${OPENVPN_PROVIDER}" == "**None**" ]] || [[ -z "${OPENVPN_PROVIDER-}" ]]; then

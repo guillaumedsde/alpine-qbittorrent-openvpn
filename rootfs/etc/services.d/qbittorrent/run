@@ -9,7 +9,7 @@ until ifconfig | grep tun | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-0
 done
 
 # drop rule allowing DNS traffic outside VPN tunnel
-iptables -D OUTPUT -d ${DNS} -p udp -m udp --dport 53 -j ACCEPT
+iptables -D OUTPUT -d $(sed -n -e 's/^.*nameserver //p' /etc/resolv.conf) -p udp -m udp --dport 53 -j ACCEPT
 
 # verify the iptables rule was dropped
 if [ $? -ne 0 ]; then

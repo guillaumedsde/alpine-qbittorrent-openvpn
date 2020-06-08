@@ -1,7 +1,17 @@
 #!/usr/bin/with-contenv sh
 
-id openvpn
-ls -al ${CREDENTIALS_FILE}
+# given a cidr subnet, transform it to subnet mask
+# Taken from https://forum.archive.openwrt.org/viewtopic.php?id=47986&p=1#p220781
+cdr2mask() {
+    # Number of args to shift, 255..255, first non-255 byte, zeroes
+    set -- $((5 - ($1 / 8))) 255 255 255 255 $(((255 << (8 - ($1 % 8))) & 255)) 0 0 0
+    [ $1 -gt 1 ] && shift $1 || shift
+    echo ${1-0}.${2-0}.${3-0}.${4-0}
+}
+
+LAN_FIRST_IP=$(echo "${LAN}" | cut -d"/" -f1)
+LAN_SUBNET=$(echo "${LAN}" | cut -d"/" -f2)
+LAN_MASK=$(cdr2mask ${LAN_SUBNET})
 
 # launch openvpn
 exec s6-setuidgid $(id -u openvpn):$(id -g openvpn) openvpn \
@@ -11,6 +21,7 @@ exec s6-setuidgid $(id -u openvpn):$(id -g openvpn) openvpn \
     --config ${OPENVPN_CONFIG_FILE} \
     --auth-user-pass ${CREDENTIALS_FILE} \
     --auth-nocache \
-    --pull-filter ignore "DNS" \
-    --dhcp-option DNS ${DNS} \
-    --redirect-gateway def1 bypass-dhcp
+    --pull-filter ignore "dhcp-option DNS" \
+    --dhcp-option DNS $(sed -n -e 's/^.*nameserver //p' /etc/resolv.conf) \
+    --redirect-gateway def1 bypass-dhcp \
+    --route ${LAN_FIRST_IP} ${LAN_MASK} net_gateway
