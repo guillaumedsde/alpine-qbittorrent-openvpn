@@ -19,7 +19,7 @@ The image aims to be safe, small and generally minimal by installing as little d
 ## ✔️ Features summary
 
 - 🏔️ Alpine Linux small and secure base Docker image
-- 🤏 Minimal installed software and as few Docker layers as possible
+- 🤏 As few Docker layers as possible
 - 🛡️ Minimal software dependencies installed
 - 🖥️ Built for many platforms
 - 🚇 Compatible with most OpenVPN providers
