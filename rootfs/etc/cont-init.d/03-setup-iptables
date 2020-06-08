@@ -29,6 +29,11 @@ iptables --delete-chain
 iptables -t nat --flush
 iptables -t nat --delete-chain
 
+# Set default policies to drop all communication unless specifically allowed
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
 # allow localhost traffic
 iptables -A INPUT -j ACCEPT -i lo
 iptables -A OUTPUT -j ACCEPT -o lo
@@ -38,10 +43,16 @@ iptables -A OUTPUT -j ACCEPT -o lo
 # I have not yet found an alternative to just allowing all outboung UDP trafffic to this IP
 # see: https://serverfault.com/a/826424
 if [ "${DNS_SERVER}" == "127.0.0.11" ]; then
-    iptables -A OUTPUT -d ${DNS_SERVER} -p udp -m udp -j ACCEPT
+    iptables -A OUTPUT -p udp -d ${DNS_SERVER} -m state --state NEW,ESTABLISHED -j ACCEPT
+    iptables -A INPUT -p udp -s ${DNS_SERVER} -m state --state ESTABLISHED -j ACCEPT
+    iptables -A OUTPUT -p tcp -d ${DNS_SERVER} -m state --state NEW,ESTABLISHED -j ACCEPT
+    iptables -A INPUT -p tcp -s ${DNS_SERVER} -m state --state ESTABLISHED -j ACCEPT
 else
-    # NOTE: this rule is dropped before starting qbittorrent
-    iptables -A OUTPUT -d ${DNS_SERVER} -p udp -m udp --dport 53 -j ACCEPT
+    # NOTE: these rules are dropped before starting qbittorrent
+    iptables -A OUTPUT -p udp -d ${DNS_SERVER} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+    iptables -A INPUT -p udp -s ${DNS_SERVER} --sport 53 -m state --state ESTABLISHED -j ACCEPT
+    iptables -A OUTPUT -p tcp -d ${DNS_SERVER} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+    iptables -A INPUT -p tcp -s ${DNS_SERVER} --sport 53 -m state --state ESTABLISHED -j ACCEPT
 fi
 
 # allow LAN traffic
@@ -59,8 +70,3 @@ iptables -A INPUT -j ACCEPT -s ${VPN_HOST} -i eth+ -p ${VPN_PROTO} -m ${VPN_PROT
 # allow traffic through VPN tunnel interface
 iptables -A INPUT -j ACCEPT -i tun+
 iptables -A OUTPUT -j ACCEPT -o tun+
-
-# Set default policies to drop all communication unless specifically allowed
-iptables -P INPUT DROP
-iptables -P OUTPUT DROP
-iptables -P FORWARD DROP
