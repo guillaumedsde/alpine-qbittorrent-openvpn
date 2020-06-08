@@ -24,7 +24,7 @@ build-containers:
       - master
     changes:
       - Dockerfile
-      - etc/*
+      - rootfs/*
       - .gitlab-ci.yml
       - build/*
 
