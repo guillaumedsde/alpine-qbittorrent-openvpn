@@ -47,6 +47,7 @@ if [ "${DNS_SERVER}" == "127.0.0.11" ]; then
     iptables -A INPUT -p udp -s ${DNS_SERVER} -m state --state ESTABLISHED -j ACCEPT
     iptables -A OUTPUT -p tcp -d ${DNS_SERVER} -m state --state NEW,ESTABLISHED -j ACCEPT
     iptables -A INPUT -p tcp -s ${DNS_SERVER} -m state --state ESTABLISHED -j ACCEPT
+    iptables -I FORWARD -s ${DNS_SERVER} -j ACCEPT
 else
     # NOTE: these rules are dropped before starting qbittorrent
     iptables -A OUTPUT -p udp -d ${DNS_SERVER} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
