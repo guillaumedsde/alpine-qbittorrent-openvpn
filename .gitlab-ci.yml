@@ -24,9 +24,9 @@ build-containers:
       - master
     changes:
       - Dockerfile
-      - rootfs/*
+      - rootfs/**/*
       - .gitlab-ci.yml
-      - build/*
+      - build/**/*
 
 # the 'pages' job will deploy and build your site to the 'public' path
 dockerhub-readme:
