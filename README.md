@@ -2,6 +2,7 @@
 
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
+[![Website](https://img.shields.io/website?label=documentation&url=https%3A%2F%2Fguillaumedsde.gitlab.io%2Falpine-qbittorrent-openvpn%2F)](https://guillaumedsde.gitlab.io/alpine-qbittorrent-openvpn/)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/guillaumedsde/alpine-qbittorrent-openvpn?label=version)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/releases)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
 [![Docker Pulls](https://img.shields.io/docker/pulls/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
@@ -11,7 +12,7 @@
 [![GitHub](https://img.shields.io/github/license/guillaumedsde/alpine-qbittorrent-openvpn)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/blob/master/LICENSE.md)
 
 This repository contains the code to build a docker container with the [qBittorrent](https://www.qbittorrent.org/) torrent client with all traffic routed through an OpenVPN tunnel with firewall rules preventing traffic outside of the tunnel.
-The container is built automatically whenever the Alpine container is updated, the final image is available on the [docker hub](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn).
+The container is built automatically whenever the Alpine container is updated, the final image is available on the [docker hub](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn) and the documentation is hosted on [gitlab pages](https://guillaumedsde.gitlab.io/alpine-qbittorrent-openvpn/).
 
 This container is based on an [Alpine Linux](https://hub.docker.com/_/alpine) and uses the [S6-overlay](https://github.com/just-containers/s6-overlay) for starting setting up the firewall, VPN tunnel and lastly starting qBittorrent.
 The image aims to be safe, small and generally minimal by installing as little dependencies as possible and running qBittorrent and OpenVPN as different unprivileged users.
