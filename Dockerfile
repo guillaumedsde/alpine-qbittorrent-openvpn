@@ -34,6 +34,7 @@ ENV CONFIG_DIR=/config \
     TUN=/dev/net/tun \
     LAN=192.168.0.0/24 \
     DOCKER_CIDR=172.17.0.0/16 \
+    DNS=1.1.1.1 \
     PUID=1000 \
     PGID=1000 \
     OPENVPN_CONFIG_FILE=/config/openvpn/config.ovpn \

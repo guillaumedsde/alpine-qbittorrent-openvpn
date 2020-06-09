@@ -7,3 +7,5 @@ fix-attrs ${CONFIG_DIR} true ${PUID}:${PGID} 0600 0700
 # set permissions on copied scripts
 chmod 755 /usr/sbin/healthcheck.sh
 chmod 755 /usr/sbin/ip-su
+
+echo "nameserver ${DNS}" >/etc/resolv.conf

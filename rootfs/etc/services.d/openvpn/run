@@ -22,6 +22,6 @@ exec s6-setuidgid $(id -u openvpn):$(id -g openvpn) openvpn \
     --auth-user-pass ${CREDENTIALS_FILE} \
     --auth-nocache \
     --pull-filter ignore "dhcp-option DNS" \
-    --dhcp-option DNS $(sed -n -e 's/^.*nameserver //p' /etc/resolv.conf) \
+    --dhcp-option DNS ${DNS} \
     --redirect-gateway def1 bypass-dhcp \
     --route ${LAN_FIRST_IP} ${LAN_MASK} net_gateway
