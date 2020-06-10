@@ -8,7 +8,6 @@ docker buildx build \
     --platform=${BUILDX_PLATFORM} \
     --memory="${RAM_FOR_BUILD}m" \
     --memory-swap="${SWAP_FOR_BUILD}m" \
-    --squash \
     --compress \
     -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${CI_COMMIT_REF_SLUG} \
     -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:latest \
