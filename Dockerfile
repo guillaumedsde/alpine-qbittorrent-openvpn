@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM alpine:latest as builder
+FROM alpine:3.11 as builder
 
 # Install libtorrent build dependencies
 RUN apk add --update --no-cache \
@@ -15,7 +15,7 @@ RUN --mount=type=tmpfs,target=/tmp \
     chmod 700 qbittorrent-nox-static-musl.sh \
     && ./qbittorrent-nox-static-musl.sh all -b "/tmp"
 
-FROM alpine:latest
+FROM alpine:3.11
 
 ARG S6_VERSION=v2.0.0.1
 
