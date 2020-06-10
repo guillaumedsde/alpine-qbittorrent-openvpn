@@ -1,21 +1,68 @@
-# syntax=docker/dockerfile:experimental
-FROM alpine:3.11 as builder
+
+FROM alpine:latest as builder
+
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
+
+ARG LIBTORRENT_VERSION="1.2.7"
+ARG QBITTORRENT_VERSION="4.2.5"
 
 # Install libtorrent build dependencies
 RUN apk add --update --no-cache \
-    bash \
-    curl \
+    autoconf \
+    automake \
+    binutils \
+    boost-dev \
+    boost-python3 \
+    build-base \
+    cppunit-dev \
+    git \
+    libtool \
+    linux-headers \
+    ncurses-dev \
+    openssl-dev \
+    python3-dev \
+    zlib-dev \
     && rm -rf /tmp/* /var/cache/apk/*
 
-# get qBittorrent compilation script
-ADD https://git.io/JvLcZ qbittorrent-nox-static-musl.sh
+WORKDIR /tmp
 
-# compile qBIttorrent
-RUN --mount=type=tmpfs,target=/tmp \
-    chmod 700 qbittorrent-nox-static-musl.sh \
-    && ./qbittorrent-nox-static-musl.sh all -b "/tmp"
+# compile libtorrent
+RUN --mount=type=tmpfs,target=/tmp/libtorrent \
+    git clone https://github.com/arvidn/libtorrent.git \
+    && cd libtorrent \
+    && git checkout tags/libtorrent_${LIBTORRENT_VERSION//./_} \
+    && ./autotool.sh \
+    && ./configure \
+    --with-libiconv \
+    --enable-python-binding \
+    --with-boost-python="$(ls -1 /usr/lib/libboost_python3*.so* | sort | head -1 | sed 's/.*.\/lib\(.*\)\.so.*/\1/')" \
+    PYTHON="$(which python3)" \
+    && make -j$(nproc) \
+    && make install-strip \
+    && ls -al /usr/local/lib/
 
-FROM alpine:3.11
+# Install qbittorrent build dependencies
+RUN apk add --update --no-cache \
+    qt5-qtbase \
+    qt5-qttools-dev \
+    && rm -rf /tmp/* /var/cache/apk/*
+
+WORKDIR /tmp
+
+# compile qbittorrent
+RUN RUN --mount=type=tmpfs,target=/tmp/qbittorrent \
+    git clone https://github.com/qbittorrent/qBittorrent.git \
+    && cd qBittorrent \
+    && git checkout tags/release-${QBITTORRENT_VERSION} \
+    && ./configure --disable-gui \
+    && make -j$(nproc) \
+    && make install \
+    && ls -al /usr/local/bin/ \
+    && qbittorrent-nox --help
+
+FROM alpine:latest
 
 ARG S6_VERSION=v2.0.0.1
 
@@ -31,6 +78,8 @@ RUN addgroup -S 'openvpn' \
     iptables \
     libcap \
     sudo \
+    qt5-qtbase \
+    zlib \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
