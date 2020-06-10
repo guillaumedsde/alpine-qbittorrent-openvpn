@@ -28,8 +28,9 @@ RUN apk add --update --no-cache \
 
 # compile libtorrent
 RUN cd /tmp \
-    && git clone https://github.com/arvidn/libtorrent.git \
-    && cd libtorrent \
+    && git clone https://github.com/arvidn/libtorrent.git 
+
+RUN cd libtorrent \
     && git checkout tags/libtorrent_${LIBTORRENT_VERSION//./_} \
     && ./autotool.sh \
     && ./configure \
@@ -49,8 +50,9 @@ RUN apk add --update --no-cache \
 
 # compile qbittorrent
 RUN cd /tmp \
-    && git clone https://github.com/qbittorrent/qBittorrent.git \
-    && cd qBittorrent \
+    && git clone https://github.com/qbittorrent/qBittorrent.git
+
+RUN cd qBittorrent \
     && git checkout tags/release-${QBITTORRENT_VERSION} \
     && ./configure --disable-gui \
     && make -j$(nproc) \
@@ -62,13 +64,13 @@ FROM alpine:latest
 
 ARG S6_VERSION=v2.0.0.1
 
-RUN addgroup -S openvpn \
+RUN addgroup -S 'openvpn' \
     && adduser -SD \
-    -s /sbin/nologin \
-    -h /var/lib/openvpn \
-    -g openvpn \
-    -G openvpn \
-    openvpn \
+    -s '/sbin/nologin' \
+    -h '/var/lib/openvpn' \
+    -g 'openvpn' \
+    -G 'openvpn' \
+    'openvpn' \
     && apk add --no-cache \
     openvpn \
     iptables \
@@ -76,7 +78,7 @@ RUN addgroup -S openvpn \
     sudo \
     qt5-qtbase \
     zlib \
-    && setcap cap_net_admin+ep $(which openvpn) \
+    && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
     && ARCH=$(uname -m) \
