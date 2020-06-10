@@ -26,12 +26,14 @@ RUN apk add --update --no-cache \
     zlib-dev \
     && rm -rf /tmp/* /var/cache/apk/*
 
-# compile libtorrent
-RUN cd /tmp \
-    && git clone https://github.com/arvidn/libtorrent.git 
+WORKDIR /tmp
 
-RUN cd libtorrent \
-    && git checkout tags/libtorrent_${LIBTORRENT_VERSION//./_} \
+# compile libtorrent
+RUN git clone https://github.com/arvidn/libtorrent.git 
+
+WORKDIR /tmp/libtorrent
+
+RUN git checkout tags/libtorrent_${LIBTORRENT_VERSION//./_} \
     && ./autotool.sh \
     && ./configure \
     --with-libiconv \
@@ -48,12 +50,14 @@ RUN apk add --update --no-cache \
     qt5-qttools-dev \
     && rm -rf /tmp/* /var/cache/apk/*
 
-# compile qbittorrent
-RUN cd /tmp \
-    && git clone https://github.com/qbittorrent/qBittorrent.git
+WORKDIR /tmp
 
-RUN cd qBittorrent \
-    && git checkout tags/release-${QBITTORRENT_VERSION} \
+# compile qbittorrent
+RUN git clone https://github.com/qbittorrent/qBittorrent.git
+
+WORKDIR /tmp/qBittorrent
+
+RUN git checkout tags/release-${QBITTORRENT_VERSION} \
     && ./configure --disable-gui \
     && make -j$(nproc) \
     && make install \
