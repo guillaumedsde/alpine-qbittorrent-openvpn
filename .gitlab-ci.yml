@@ -27,6 +27,8 @@ build-containers:
       - rootfs/**/*
       - .gitlab-ci.yml
       - build/**/*
+  tags:
+    - docker
 
 # the 'pages' job will deploy and build your site to the 'public' path
 dockerhub-readme:
