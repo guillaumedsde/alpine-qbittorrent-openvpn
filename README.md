@@ -1,5 +1,6 @@
 # [🐋 Alpine qBittorrent OpenVPN](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7ed4570451f84e789380abe9c255f837)](https://app.codacy.com/manual/guillaumedsde/alpine-qbittorrent-openvpn?utm_source=github.com&utm_medium=referral&utm_content=guillaumedsde/alpine-qbittorrent-openvpn&utm_campaign=Badge_Grade_Dashboard)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
 [![Website](https://img.shields.io/website?label=documentation&url=https%3A%2F%2Fguillaumedsde.gitlab.io%2Falpine-qbittorrent-openvpn%2F)](https://guillaumedsde.gitlab.io/alpine-qbittorrent-openvpn/)
