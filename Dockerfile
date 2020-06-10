@@ -1,3 +1,63 @@
+
+FROM alpine:latest as builder
+
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
+
+ARG LIBTORRENT_VERSION="1.2.7"
+ARG QBITTORRENT_VERSION="4.2.5"
+
+# Install libtorrent build dependencies
+RUN apk add --update --no-cache \
+    autoconf \
+    automake \
+    binutils \
+    boost-dev \
+    boost-python3 \
+    build-base \
+    cppunit-dev \
+    git \
+    libtool \
+    linux-headers \
+    ncurses-dev \
+    openssl-dev \
+    python3-dev \
+    zlib-dev \
+    && rm -rf /tmp/* /var/cache/apk/*
+
+# compile libtorrent
+RUN cd /tmp \
+    && git clone https://github.com/arvidn/libtorrent.git \
+    && cd libtorrent \
+    && git checkout tags/libtorrent_${LIBTORRENT_VERSION//./_} \
+    && ./autotool.sh \
+    && ./configure \
+    --with-libiconv \
+    --enable-python-binding \
+    --with-boost-python="$(ls -1 /usr/lib/libboost_python3*.so* | sort | head -1 | sed 's/.*.\/lib\(.*\)\.so.*/\1/')" \
+    PYTHON="$(which python3)" \
+    && make -j$(nproc) \
+    && make install-strip \
+    && ls -al /usr/local/lib/
+
+# Install qbittorrent build dependencies
+RUN apk add --update --no-cache \
+    qt5-qtbase \
+    qt5-qttools-dev \
+    && rm -rf /tmp/* /var/cache/apk/*
+
+# compile qbittorrent
+RUN cd /tmp \
+    && git clone https://github.com/qbittorrent/qBittorrent.git \
+    && cd qBittorrent \
+    && git checkout tags/release-${QBITTORRENT_VERSION} \
+    && ./configure --disable-gui \
+    && make -j$(nproc) \
+    && make install \
+    && ls -al /usr/local/bin/ \
+    && qbittorrent-nox --help
+
 FROM alpine:latest
 
 ARG S6_VERSION=v2.0.0.1
@@ -9,12 +69,13 @@ RUN addgroup -S openvpn \
     -g openvpn \
     -G openvpn \
     openvpn \
-    && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
     && apk add --no-cache \
     openvpn \
     iptables \
     libcap \
     sudo \
+    qt5-qtbase \
+    zlib \
     && setcap cap_net_admin+ep $(which openvpn) \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
@@ -25,6 +86,9 @@ RUN addgroup -S openvpn \
     && wget https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${S6_ARCH}.tar.gz \
     && tar xzf s6-overlay-${S6_ARCH}.tar.gz -C / \ 
     && rm s6-overlay-${S6_ARCH}.tar.gz
+
+COPY --from=builder /usr/local/lib/libtorrent-rasterbar.so.10.0.0 /usr/lib/libtorrent-rasterbar.so.10
+COPY --from=builder /usr/local/bin/qbittorrent-nox /usr/bin/qbittorrent-nox
 
 COPY rootfs /
 
