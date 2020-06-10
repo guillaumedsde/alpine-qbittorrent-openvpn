@@ -1,8 +1,8 @@
 #!/bin/sh
 
 AVAILABLE_RAM="$(free -m | awk '/^Mem/ {print $7}')"
-RAM_FOR_BUILD=$((${AVAILABLE_RAM} - ${AVAILABLE_RAM} / 15))
-SWAP_FOR_BUILD=$((${RAM_FOR_BUILD} + ${RAM_FOR_BUILD} / 2))
+RAM_FOR_BUILD=$((${AVAILABLE_RAM} / 6))
+SWAP_FOR_BUILD=$((${AVAILABLE_RAM} / 3))
 
 docker buildx build \
     --platform=${BUILDX_PLATFORM} \
