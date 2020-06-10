@@ -1,4 +1,4 @@
-
+# syntax=docker/dockerfile:experimental
 FROM alpine:latest as builder
 
 # Install libtorrent build dependencies
@@ -7,14 +7,13 @@ RUN apk add --update --no-cache \
     curl \
     && rm -rf /tmp/* /var/cache/apk/*
 
-WORKDIR /tmp
-
 # get qBittorrent compilation script
 ADD https://git.io/JvLcZ qbittorrent-nox-static-musl.sh
 
 # compile qBIttorrent
-RUN chmod 700 qbittorrent-nox-static-musl.sh \
-    && ./qbittorrent-nox-static-musl.sh all -b "/tmp/qbittorrent"
+RUN --mount=type=tmpfs,target=/tmp \
+    chmod 700 qbittorrent-nox-static-musl.sh \
+    && ./qbittorrent-nox-static-musl.sh all -b "/tmp"
 
 FROM alpine:latest
 
