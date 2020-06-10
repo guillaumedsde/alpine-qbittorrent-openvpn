@@ -14,7 +14,7 @@ ADD https://git.io/JvLcZ qbittorrent-nox-static-musl.sh
 
 # compile qBIttorrent
 RUN chmod 700 qbittorrent-nox-static-musl.sh \
-    && ./qbittorrent-nox-static-musl.sh all -b "./"
+    && ./qbittorrent-nox-static-musl.sh all -b "/tmp/qbittorrent"
 
 FROM alpine:latest
 
