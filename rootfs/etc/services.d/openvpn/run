@@ -17,7 +17,7 @@ LAN_MASK=$(cdr2mask ${LAN_SUBNET})
 exec s6-setuidgid $(id -u openvpn):$(id -g openvpn) openvpn \
     --writepid /var/run/openvpn/pid \
     --iproute /usr/sbin/ip-su \
-    --dev tun0 --persist-tun \
+    --dev-node 'tun0' --persist-tun \
     --config ${OPENVPN_CONFIG_FILE} \
     --auth-user-pass ${CREDENTIALS_FILE} \
     --auth-nocache \

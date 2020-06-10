@@ -11,10 +11,8 @@ VPN_PROTO=$(awk '/proto / { print $2 }' "${OPENVPN_CONFIG_FILE}")
 VPN_HOST=$(awk '/remote / { print $2 }' "${OPENVPN_CONFIG_FILE}")
 VPN_PORT=$(awk '/remote / { print $3 }' "${OPENVPN_CONFIG_FILE}")
 
-DNS_SERVER=${DNS}
-
 # Check that VPN information was sucessfully extracted from configuration
-if [[ -z "${VPN_PROTO}" || -z "${VPN_HOST}" || -z "${VPN_PORT}" ]]; then
+if [ -z "${VPN_PROTO}" ] || [ -z "${VPN_HOST}" ] || [ -z "${VPN_PORT}" ]; then
     echo "One of the following variables could not be detected in the VPN configuration:
     VPN_PROTO:  $VPN_PROTO
     VPN_HOST:   $VPN_HOST
@@ -41,10 +39,10 @@ iptables -A OUTPUT -j ACCEPT -o lo
 # allow DNS traffic outside VPN tunnel with given DNS resolver only on UDP and DNS port
 
 # NOTE: these rules are dropped before starting qbittorrent
-iptables -A OUTPUT -p udp -d ${DNS_SERVER} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p udp -s ${DNS_SERVER} --sport 53 -m state --state ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p tcp -d ${DNS_SERVER} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p tcp -s ${DNS_SERVER} --sport 53 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p udp -d ${DNS} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p udp -s ${DNS} --sport 53 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp -d ${DNS} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p tcp -s ${DNS} --sport 53 -m state --state ESTABLISHED -j ACCEPT
 
 # allow LAN traffic
 iptables -A INPUT --src ${LAN} -j ACCEPT -i eth+

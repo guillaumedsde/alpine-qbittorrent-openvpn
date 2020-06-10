@@ -2,12 +2,14 @@
 
 CONFIG_FILE=${CONFIG_DIR}/qBittorrent/config/qBittorrent.conf
 export QBT_PROFILE=${CONFIG_DIR}
+TUN_DEVICE=$(ip -o link show | awk -F': ' '{print $2}' | grep tun)
 
 # wait for VPN connection
-until ifconfig | grep tun | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00"; do
+until [ ! -z "$(ip a show ${TUN_DEVICE} up)" ]; do
     sleep 0.5
 done
 
+ip a show virbr0-nic up
 # drop rule allowing DNS traffic outside VPN tunnel
 iptables -D OUTPUT -p udp -d ${DNS} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -D INPUT -p udp -s ${DNS} --sport 53 -m state --state ESTABLISHED -j ACCEPT

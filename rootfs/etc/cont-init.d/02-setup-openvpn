@@ -1,24 +1,20 @@
 #!/usr/bin/with-contenv sh
 
-# create TUN device
-s6-mkdir -p /dev/net
-if [ ! -c ${TUN} ]; then
-    mknod ${TUN} c 10 200
-fi
-chmod 666 ${TUN}
-
-s6-mkdir -p \
+mkdir -p \
     '/var/log/openvpn' \
     '/var/run/openvpn'
 chown -fR openvpn:openvpn \
+    '/mnt/openvpn' \
     '/var/log/openvpn' \
     '/var/run/openvpn' || :
+chmod -fR a=,u+rX \
+    '/mnt/openvpn' || :
 chmod -fR a=,ug+rwX \
     '/var/log/openvpn' \
     '/var/run/openvpn' || :
-openvpn \
+/usr/sbin/openvpn \
     --mktun --dev 'tun0' --dev-type 'tun' \
-    --user openvpn --group openvpn
+    --user 'openvpn' --group 'openvpn' >'/dev/null'
 
 # write credentials to file
 s6-mkdir -p $(dirname ${CREDENTIALS_FILE})
@@ -29,7 +25,7 @@ chown openvpn:openvpn ${CREDENTIALS_FILE}
 chmod 0600 ${CREDENTIALS_FILE}
 
 # check if VPN provider was defined
-if [[ "${OPENVPN_PROVIDER}" == "**None**" ]] || [[ -z "${OPENVPN_PROVIDER-}" ]]; then
+if [ "${OPENVPN_PROVIDER}" = "**None**" ] || [ -z "${OPENVPN_PROVIDER-}" ]; then
     echo "OpenVPN provider not set. Using configuration at ${OPENVPN_CONFIG_FILE}"
     # if not fallback to given VPN configuration
     exit 0
@@ -43,7 +39,7 @@ VPN_PROVIDER_CONFIGS="https://raw.githubusercontent.com/haugene/docker-transmiss
 
 # determine which configuration from the provider we are going to use
 # NOTE: some providers have a "default.ovpn", other do not
-if [[ -n "${OPENVPN_CONFIG}" ]]; then
+if [ -n "${OPENVPN_CONFIG}" ]; then
     OPENVPN_CONFIG_URL="${VPN_PROVIDER_CONFIGS}/${OPENVPN_CONFIG}.ovpn"
 else
     echo "No VPN configuration provided. Using default."
