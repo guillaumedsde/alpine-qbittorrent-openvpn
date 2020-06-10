@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-build-containers:
+.build-container:
   image: docker:latest
   stage: build
   services:
@@ -14,7 +14,6 @@ build-containers:
     DOCKER_CLI_EXPERIMENTAL: enabled
     BUILDX_URL: https://github.com/docker/buildx/releases/latest/download/buildx-v0.4.1.linux-amd64
     BUILDX_BUILDER: builder
-    BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
   before_script:
     - /bin/sh build/prepare_builder.sh
   script:
@@ -29,6 +28,24 @@ build-containers:
       - build/**/*
   tags:
     - docker
+
+linux/amd64:
+  extends: .build-container
+
+linux/386:
+  extends: .build-container
+
+linux/arm64:
+  extends: .build-container
+
+linux/arm/v7:
+  extends: .build-container
+
+linux/arm/v6:
+  extends: .build-container
+
+linux/ppc64le:
+  extends: .build-container
 
 # the 'pages' job will deploy and build your site to the 'public' path
 dockerhub-readme:
