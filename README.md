@@ -5,6 +5,7 @@
 [![Website](https://img.shields.io/website?label=documentation&url=https%3A%2F%2Fguillaumedsde.gitlab.io%2Falpine-qbittorrent-openvpn%2F)](https://guillaumedsde.gitlab.io/alpine-qbittorrent-openvpn/)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/guillaumedsde/alpine-qbittorrent-openvpn?label=version)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/releases)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
+[![Codacy grade](https://img.shields.io/codacy/grade/d9317b33a3444dd29abe1b3d2259958b)](https://app.codacy.com/manual/guillaumedsde/alpine-qbittorrent-openvpn/dashboard)
 [![Docker Pulls](https://img.shields.io/docker/pulls/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
 [![GitHub stars](https://img.shields.io/github/stars/guillaumedsde/alpine-qbittorrent-openvpn?label=Github%20stars)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn)
 [![GitHub watchers](https://img.shields.io/github/watchers/guillaumedsde/alpine-qbittorrent-openvpn?label=Github%20Watchers)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn)
