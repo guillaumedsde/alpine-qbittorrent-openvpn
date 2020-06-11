@@ -1,4 +1,4 @@
-
+# syntax=docker/dockerfile:experimental
 FROM alpine:latest as builder
 
 ARG BUILD_DATE
