@@ -9,7 +9,10 @@ RUN addgroup -S openvpn \
     -g openvpn \
     -G openvpn \
     openvpn \
-    && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
+    && ARCH=$(uname -m) \
+    && if [ "${ARCH}" = "x86_64" ]; then wget -qO /usr/bin/qbittorrent-nox https://git.io/JvLc0 && chmod 755 /usr/bin/qbittorrent-nox; \
+    else apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox; \
+    fi \
     && apk add --no-cache \
     openvpn \
     iptables \
@@ -18,9 +21,12 @@ RUN addgroup -S openvpn \
     && setcap cap_net_admin+ep $(which openvpn) \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && ARCH=$(uname -m) \
     && echo building for ${ARCH} \
-    && if [ "${ARCH}" == x86_64 ]; then S6_ARCH=amd64; elif [ "${ARCH}" == i386 ]; then S6_ARCH=X86; elif echo "$ARCH" | grep -E -q "armv6|armv7"; then S6_ARCH=arm; else S6_ARCH=${ARCH}; fi \
+    && if [ "${ARCH}" = "x86_64" ]; then S6_ARCH=amd64; \
+    elif [ "${ARCH}" = "i386" ]; then S6_ARCH=X86; \
+    elif echo "$ARCH" | grep -E -q "armv6|armv7"; then S6_ARCH=arm; \
+    else S6_ARCH=${ARCH}; \
+    fi \
     && echo using architecture ${S6_ARCH} for S6 Overlay \
     && wget https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${S6_ARCH}.tar.gz \
     && tar xzf s6-overlay-${S6_ARCH}.tar.gz -C / \ 
