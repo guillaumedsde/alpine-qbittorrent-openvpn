@@ -52,7 +52,7 @@ RUN apk add --update --no-cache \
 WORKDIR /tmp
 
 # compile qbittorrent
-RUN RUN --mount=type=tmpfs,target=/tmp/qbittorrent \
+RUN --mount=type=tmpfs,target=/tmp/qbittorrent \
     git clone https://github.com/qbittorrent/qBittorrent.git \
     && cd qBittorrent \
     && git checkout tags/release-${QBITTORRENT_VERSION} \
