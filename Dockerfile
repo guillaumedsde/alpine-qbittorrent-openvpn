@@ -1,21 +1,21 @@
 # syntax=docker/dockerfile:experimental
-FROM alpine:3.11 as builder
+FROM debian:buster-slim as builder
 
-# Install libtorrent build dependencies
-RUN apk add --update --no-cache \
-    bash \
+RUN apt-get update && \
+    apt-get install -y \
+    wget \
     curl \
-    && rm -rf /tmp/* /var/cache/apk/*
+    && apt-get clean
 
 # get qBittorrent compilation script
-ADD https://git.io/JvLcZ qbittorrent-nox-static-musl.sh
+ADD https://git.io/JvLcs qbittorrent-nox-staticish.sh 
 
 # compile qBIttorrent
 RUN --mount=type=tmpfs,target=/tmp \
-    chmod 700 qbittorrent-nox-static-musl.sh \
-    && ./qbittorrent-nox-static-musl.sh all -b "/tmp"
+    chmod 700 qbittorrent-nox-staticish.sh \
+    && ./qbittorrent-nox-staticish.sh all -b "/tmp"
 
-FROM alpine:3.11
+FROM alpine:latest
 
 ARG S6_VERSION=v2.0.0.1
 
