@@ -31,6 +31,8 @@ RUN addgroup -S 'openvpn' \
     iptables \
     libcap \
     sudo \
+    qt5-qtbase \
+    zlib \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
