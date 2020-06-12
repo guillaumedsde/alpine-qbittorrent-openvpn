@@ -5,7 +5,10 @@ VERSION="$(git describe --abbrev=0)"
 if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then
     TAGS="-t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${VERSION} -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:latest"
 else
-    TAGS="-t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${CI_COMMIT_REF_NAME}"
+    # cleanup branch name
+    BRANCH="$(echo "${CI_COMMIT_REF_NAME}" | tr / _)"
+    # tag image with branch name
+    TAGS="-t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${BRANCH}"
 fi
 
 docker buildx build \
