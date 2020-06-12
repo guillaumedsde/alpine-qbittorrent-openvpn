@@ -7,4 +7,5 @@ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 docker buildx create --use --driver docker-container --name ${BUILDX_BUILDER} --platform=${BUILDX_PLATFORM}
 docker buildx inspect --bootstrap ${BUILDX_BUILDER}
 docker buildx ls
-echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin index.docker.io
+docker logout
+echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
