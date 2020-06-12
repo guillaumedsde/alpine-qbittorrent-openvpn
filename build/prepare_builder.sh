@@ -1,5 +1,6 @@
 #!/bin/sh
 mkdir -p $HOME/.docker/cli-plugins/
+apk add --no-cache git
 wget -O $HOME/.docker/cli-plugins/docker-buildx $BUILDX_URL
 chmod a+x $HOME/.docker/cli-plugins/docker-buildx
 echo -e '{\n  "experimental": "enabled"\n}' | tee $HOME/.docker/config.json
