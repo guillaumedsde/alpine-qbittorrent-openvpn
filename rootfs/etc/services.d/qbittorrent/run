@@ -14,10 +14,4 @@ iptables -D INPUT -p udp -s ${DNS} --sport 53 -m state --state ESTABLISHED -j AC
 iptables -D OUTPUT -p tcp -d ${DNS} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -D INPUT -p tcp -s ${DNS} --sport 53 -m state --state ESTABLISHED -j ACCEPT
 
-# verify the iptables rule was dropped
-if [ $? -ne 0 ]; then
-    echo "ERROR: could not drop iptables rule allowing DNS traffic"
-    exit 1
-fi
-
 exec s6-setuidgid ${PUID}:${PGID} qbittorrent-nox
