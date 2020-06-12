@@ -25,14 +25,13 @@ RUN addgroup -S openvpn \
     -G openvpn \
     openvpn \
     && ARCH="$(uname -m)" \
-    && if [ "${ARCH}" = "x86_64" ]; then wget -qO /usr/bin/qbittorrent-nox https://git.io/JvLc0 && chmod 755 /usr/bin/qbittorrent-nox; \
-    else apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox; \
-    fi \
+    && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
     && apk add --no-cache \
     openvpn \
     iptables \
     libcap \
     sudo \
+    valgrind \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
