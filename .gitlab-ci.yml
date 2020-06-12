@@ -16,9 +16,11 @@ build-containers:
     BUILDX_BUILDER: builder
     BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
   before_script:
-    - /bin/sh build/prepare_builder.sh
+    - chmod +x ./build/prepare_builder.sh
+    - . ./build/prepare_builder.sh
   script:
-    - /bin/sh build/build.sh
+    - chmod +x ./build/build.sh
+    - . ./build/build.sh
   only:
     refs:
       - master
