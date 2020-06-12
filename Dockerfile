@@ -1,27 +1,20 @@
 # syntax=docker/dockerfile:experimental
 FROM alpine:3.11 as builder
 
+# install compilation script dependencies
 RUN apk add --no-cache \
     wget \
     curl \
-    bash \
-    bash-completion \
-    build-base \
-    pkgconf \
-    autoconf \
-    automake \
-    libtool \
-    git \
-    perl \
-    python3 \
-    python3-dev \
-    linux-headers 
+    bash
 
 # get qBittorrent compilation script
 ADD https://git.io/JvLcZ qbittorrent-nox-static-musl.sh 
-
 RUN chmod 700 qbittorrent-nox-static-musl.sh 
 
+# install build dependencies
+RUN ./qbittorrent-nox-static-musl.sh
+
+# statically compile qbittorrent
 RUN ./qbittorrent-nox-static-musl.sh all --no-delete
 
 FROM alpine:latest
