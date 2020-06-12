@@ -24,7 +24,7 @@ RUN addgroup -S openvpn \
     -g openvpn \
     -G openvpn \
     openvpn \
-    && ARCH=$(uname -m) \
+    && ARCH="$(uname -m)" \
     && if [ "${ARCH}" = "x86_64" ]; then wget -qO /usr/bin/qbittorrent-nox https://git.io/JvLc0 && chmod 755 /usr/bin/qbittorrent-nox; \
     else apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox; \
     fi \
@@ -33,19 +33,19 @@ RUN addgroup -S openvpn \
     iptables \
     libcap \
     sudo \
-    && setcap cap_net_admin+ep $(which openvpn) \
+    && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && echo building for ${ARCH} \
+    && echo building for "${ARCH}" \
     && if [ "${ARCH}" = "x86_64" ]; then S6_ARCH=amd64; \
     elif [ "${ARCH}" = "i386" ]; then S6_ARCH=X86; \
     elif echo "$ARCH" | grep -E -q "armv6|armv7"; then S6_ARCH=arm; \
-    else S6_ARCH=${ARCH}; \
+    else S6_ARCH="${ARCH}"; \
     fi \
-    && echo using architecture ${S6_ARCH} for S6 Overlay \
-    && wget https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${S6_ARCH}.tar.gz \
-    && tar xzf s6-overlay-${S6_ARCH}.tar.gz -C / \ 
-    && rm s6-overlay-${S6_ARCH}.tar.gz
+    && echo using architecture "${S6_ARCH}" for S6 Overlay \
+    && wget "https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${S6_ARCH}.tar.gz" \
+    && tar xzf "s6-overlay-${S6_ARCH}.tar.gz" -C / \ 
+    && rm "s6-overlay-${S6_ARCH}.tar.gz"
 
 COPY rootfs /
 
