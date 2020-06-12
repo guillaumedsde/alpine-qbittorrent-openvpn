@@ -22,8 +22,6 @@ build-containers:
     - chmod +x ./build/build.sh
     - . ./build/build.sh
   only:
-    refs:
-      - master
     changes:
       - Dockerfile
       - rootfs/**/*
