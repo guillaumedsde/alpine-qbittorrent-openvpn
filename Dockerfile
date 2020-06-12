@@ -1,19 +1,28 @@
 # syntax=docker/dockerfile:experimental
-FROM debian:buster-slim as builder
+FROM alpine:3.11 as builder
 
-RUN apt-get update && \
-    apt-get install -y \
+RUN apk add --no-cache \
     wget \
     curl \
-    && apt-get clean
+    bash \
+    bash-completion \
+    build-base \
+    pkgconf \
+    autoconf \
+    automake \
+    libtool \
+    git \
+    perl \
+    python3 \
+    python3-dev \
+    linux-headers 
 
 # get qBittorrent compilation script
-ADD https://git.io/JvLcs qbittorrent-nox-staticish.sh 
+ADD https://git.io/JvLcZ qbittorrent-nox-static-musl.sh 
 
-# compile qBIttorrent
-RUN --mount=type=tmpfs,target=/tmp \
-    chmod 700 qbittorrent-nox-staticish.sh \
-    && ./qbittorrent-nox-staticish.sh all -b "/tmp"
+RUN chmod 700 qbittorrent-nox-static-musl.sh 
+
+RUN ./qbittorrent-nox-static-musl.sh all --no-delete
 
 FROM alpine:latest
 
@@ -44,7 +53,6 @@ RUN addgroup -S 'openvpn' \
     && tar xzf s6-overlay-${S6_ARCH}.tar.gz -C / \ 
     && rm s6-overlay-${S6_ARCH}.tar.gz
 
-COPY --from=builder /usr/local/lib/libtorrent-rasterbar.so.10.0.0 /usr/lib/libtorrent-rasterbar.so.10
 COPY --from=builder /usr/local/bin/qbittorrent-nox /usr/bin/qbittorrent-nox
 
 COPY rootfs /
