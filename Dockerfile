@@ -1,5 +1,20 @@
 FROM alpine:latest
 
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
+
+LABEL org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.name="alpine-qbittorrent-openvpn" \
+    org.label-schema.description="qBittorrent docker container with OpenVPN client running as unprivileged user on alpine linux" \
+    org.label-schema.url="https://guillaumedsde.gitlab.io/alpine-qbittorrent-openvpn/" \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.vcs-url="https://github.com/guillaumedsde/alpine-qbittorrent-openvpn" \
+    org.label-schema.vendor="guillaumedsde" \
+    org.label-schema.version=$VERSION \
+    org.label-schema.schema-version="1.0"
+
 ARG S6_VERSION=v2.0.0.1
 
 RUN addgroup -S openvpn \
