@@ -1,6 +1,5 @@
 #!/usr/bin/with-contenv sh
 
-CONFIG_FILE=${CONFIG_DIR}/qBittorrent/config/qBittorrent.conf
 export QBT_PROFILE=${CONFIG_DIR}
 
 # wait for VPN connection
