@@ -8,10 +8,12 @@ until ifconfig | grep tun | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-0
     sleep 0.5
 done
 
-# drop rule allowing DNS traffic outside VPN tunnel
-iptables -D OUTPUT -p udp -d ${DNS} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -D INPUT -p udp -s ${DNS} --sport 53 -m state --state ESTABLISHED -j ACCEPT
-iptables -D OUTPUT -p tcp -d ${DNS} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -D INPUT -p tcp -s ${DNS} --sport 53 -m state --state ESTABLISHED -j ACCEPT
+for rule in "OUTPUT -p udp -d ${DNS} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT" "INPUT -p udp -s ${DNS} --sport 53 -m state --state ESTABLISHED -j ACCEPT" "OUTPUT -p tcp -d ${DNS} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT" "INPUT -p tcp -s ${DNS} --sport 53 -m state --state ESTABLISHED -j ACCEPT"; do
+    # drop rule if it exists
+    if iptables -C ${rule} >/dev/null 2>&1; then
+        echo "dropping IPtables rule: ${rule}"
+        iptables -D ${rule}
+    fi
+done
 
 exec s6-setuidgid ${PUID}:${PGID} qbittorrent-nox
