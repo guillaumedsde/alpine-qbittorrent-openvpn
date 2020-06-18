@@ -1,4 +1,9 @@
-FROM alpine:3.12
+
+ARG BASE_IMAGE="alpine:3.12"
+# uncomment below to enable qbittorrent search engine
+# ARG BASE_IMAGE="python:3.12-alpine"
+
+FROM ${BASE_IMAGE}
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
