@@ -1,6 +1,16 @@
 stages:
+  - analyze
   - build
   - deploy
+
+fossa-license-scan:
+  image: debian:latest
+  stage: analyze
+  before_script:
+    - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | bash"
+  script:
+    - fossa init
+    - fossa analyze
 
 build-containers:
   image: docker:latest
