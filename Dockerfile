@@ -25,12 +25,7 @@ RUN addgroup -S openvpn \
     -G openvpn \
     openvpn \
     && ARCH="$(uname -m)" \
-    && if [ "${ARCH}" = "x86_64" ]; \
-    then wget -qO /usr/bin/qbittorrent-nox https://git.io/Jf7bF && chmod 755 /usr/bin/qbittorrent-nox; \
-    elif echo "${ARCH}" | grep -E -q "aarch64|armv8"; \
-    then wget -qO /usr/bin/qbittorrent-nox https://git.io/Jf7Ne && chmod 755 /usr/bin/qbittorrent-nox; \
-    else apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox; \
-    fi \
+    && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
     && apk add --no-cache \
     openvpn \
     iptables \
