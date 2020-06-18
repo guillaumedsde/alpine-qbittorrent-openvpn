@@ -1,17 +1,6 @@
 stages:
-  - analyze
   - build
   - deploy
-
-fossa-license-scan:
-  image: alpine:latest
-  stage: analyze
-  before_script:
-    - apk add --no-cache bash curl
-    - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | bash"
-  script:
-    - fossa init
-    - fossa analyze
 
 build-containers:
   image: docker:latest
