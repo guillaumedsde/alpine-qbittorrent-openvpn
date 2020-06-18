@@ -1,13 +1,13 @@
 #!/usr/bin/with-contenv sh
 
 # create configuration directory
-s6-mkdir -p ${CONFIG_DIR}/qBittorrent
-s6-mkdir -p ${QBT_SAVE_PATH}
+s6-mkdir -p "${CONFIG_DIR}/qBittorrent"
+s6-mkdir -p "${QBT_SAVE_PATH}"
 
 # set permissions on configuration directory
-echo ${CONFIG_DIR}/qBittorrent true ${PUID}:${PGID} 0600 0700 | fix-attrs
-echo ${QBT_SAVE_PATH} true ${PUID}:${PGID} 0600 0700 | fix-attrs
-echo ${CONFIG_DIR}/openvpn true openvpn:openvpn 0600 0700 | fix-attrs
+echo "${CONFIG_DIR}/qBittorrent true ${PUID}:${PGID} 0600 0700" | fix-attrs
+echo "${QBT_SAVE_PATH} true ${PUID}:${PGID} 0600 0700" | fix-attrs
+echo "${CONFIG_DIR}/openvpn true openvpn:openvpn 0600 0700" | fix-attrs
 
 # set permissions on copied scripts
 chmod 755 /usr/sbin/healthcheck.sh

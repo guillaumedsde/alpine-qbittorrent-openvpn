@@ -2,10 +2,10 @@
 
 # create TUN device
 s6-mkdir -p /dev/net
-if [ ! -c ${TUN} ]; then
-    mknod ${TUN} c 10 200
+if [ ! -c "${TUN}" ]; then
+    mknod "${TUN}" c 10 200
 fi
-chmod 666 ${TUN}
+chmod 666 "${TUN}"
 
 s6-mkdir -p \
     '/var/log/openvpn' \
@@ -22,14 +22,14 @@ openvpn \
 
 # write credentials to file
 s6-mkdir -p $(dirname ${CREDENTIALS_FILE})
-echo ${OPENVPN_USERNAME} >${CREDENTIALS_FILE}
-echo ${OPENVPN_PASSWORD} >>${CREDENTIALS_FILE}
+echo "${OPENVPN_USERNAME}" >"${CREDENTIALS_FILE}"
+echo "${OPENVPN_PASSWORD}" >>"${CREDENTIALS_FILE}"
 
-chown openvpn:openvpn ${CREDENTIALS_FILE}
-chmod 0600 ${CREDENTIALS_FILE}
+chown openvpn:openvpn "${CREDENTIALS_FILE}"
+chmod 0600 "${CREDENTIALS_FILE}"
 
 # check if VPN provider was defined
-if [[ "${OPENVPN_PROVIDER}" == "**None**" ]] || [[ -z "${OPENVPN_PROVIDER-}" ]]; then
+if [ "${OPENVPN_PROVIDER}" == "**None**" ] || [ -z "${OPENVPN_PROVIDER-}" ]; then
     echo "OpenVPN provider not set. Using configuration at ${OPENVPN_CONFIG_FILE}"
     # if not fallback to given VPN configuration
     exit 0
@@ -43,7 +43,7 @@ VPN_PROVIDER_CONFIGS="https://raw.githubusercontent.com/haugene/docker-transmiss
 
 # determine which configuration from the provider we are going to use
 # NOTE: some providers have a "default.ovpn", other do not
-if [[ -n "${OPENVPN_CONFIG}" ]]; then
+if [ -n "${OPENVPN_CONFIG}" ]; then
     OPENVPN_CONFIG_URL="${VPN_PROVIDER_CONFIGS}/${OPENVPN_CONFIG}.ovpn"
 else
     echo "No VPN configuration provided. Using default."
@@ -51,7 +51,7 @@ else
 fi
 
 # get the provider's configuration
-wget ${OPENVPN_CONFIG_URL} -O ${OPENVPN_CONFIG_FILE}
+wget "${OPENVPN_CONFIG_URL}" -O "${OPENVPN_CONFIG_FILE}"
 
 # verify the configuration was successfully downloaded
 if [ $? -ne 0 ]; then
@@ -61,5 +61,5 @@ else
     echo "Found OpenVPN configuration: ${OPENVPN_CONFIG_FILE} for provider ${OPENVPN_PROVIDER} at ${OPENVPN_CONFIG_URL} using it"
 fi
 
-chown openvpn:openvpn ${OPENVPN_CONFIG_FILE}
-chmod 0600 ${OPENVPN_CONFIG_FILE}
+chown openvpn:openvpn "${OPENVPN_CONFIG_FILE}"
+chmod 0600 "${OPENVPN_CONFIG_FILE}"

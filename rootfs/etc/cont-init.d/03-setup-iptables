@@ -4,7 +4,7 @@
 DECTECTED_DOCKER_CIDR=$(ip -o -f inet addr show | awk '/scope global/ {print $4}')
 
 # fallback to DOCKER_CIDR if no DECTECTED_DOCKER_CIDR
-DOCKER_CIDR=${DECTECTED_DOCKER_CIDR:-DOCKER_CIDR}
+DOCKER_CIDR="${DECTECTED_DOCKER_CIDR:-DOCKER_CIDR}"
 
 # extract VPN protocol, host and port from configuration
 CONFIG_PROTO=$(awk '/proto / { print $2 }' "${OPENVPN_CONFIG_FILE}")
@@ -24,7 +24,7 @@ if [ -z "${VPN_HOST}" ]; then
     exit 1
 fi
 
-if [ -z "${VPN_PROTO}" || -z "${VPN_PORT}" ]; then
+if [ -z "${VPN_PROTO}" ] || [ -z "${VPN_PORT}" ]; then
     echo "INFO: One of the following variables could not be detected in the VPN configuration, fell back to default:
     VPN_PROTO:  $VPN_PROTO
     VPN_HOST:   $VPN_HOST
@@ -55,22 +55,22 @@ iptables -A OUTPUT -j ACCEPT -o lo
 # allow DNS traffic outside VPN tunnel with given DNS resolver only on UDP and DNS port
 
 # NOTE: these rules are dropped before starting qbittorrent
-iptables -A OUTPUT -p udp -d ${DNS_SERVER} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p udp -s ${DNS_SERVER} --sport 53 -m state --state ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p tcp -d ${DNS_SERVER} --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p tcp -s ${DNS_SERVER} --sport 53 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p udp -d "${DNS_SERVER}" --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p udp -s "${DNS_SERVER}" --sport 53 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp -d "${DNS_SERVER}" --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p tcp -s "${DNS_SERVER}" --sport 53 -m state --state ESTABLISHED -j ACCEPT
 
 # allow LAN traffic
-iptables -A INPUT --src ${LAN} -j ACCEPT -i eth+
-iptables -A OUTPUT -d ${LAN} -j ACCEPT -o eth+
+iptables -A INPUT --src "${LAN}" -j ACCEPT -i eth+
+iptables -A OUTPUT -d "${LAN}" -j ACCEPT -o eth+
 
 # allow traffic with other containers on docker network
-iptables -A INPUT --src ${DOCKER_CIDR} -j ACCEPT -i eth+
-iptables -A OUTPUT -d ${DOCKER_CIDR} -j ACCEPT -o eth+
+iptables -A INPUT --src "${DOCKER_CIDR}" -j ACCEPT -i eth+
+iptables -A OUTPUT -d "${DOCKER_CIDR}" -j ACCEPT -o eth+
 
 # allow traffic with VPN host over VPN's port and with VPN's protocol
-iptables -A OUTPUT -j ACCEPT -d ${VPN_HOST} -o eth+ -p ${VPN_PROTO} -m ${VPN_PROTO} --dport ${VPN_PORT}
-iptables -A INPUT -j ACCEPT -s ${VPN_HOST} -i eth+ -p ${VPN_PROTO} -m ${VPN_PROTO} --sport ${VPN_PORT}
+iptables -A OUTPUT -j ACCEPT -d "${VPN_HOST}" -o eth+ -p "${VPN_PROTO}" -m "${VPN_PROTO}" --dport "${VPN_PORT}"
+iptables -A INPUT -j ACCEPT -s "${VPN_HOST}" -i eth+ -p "${VPN_PROTO}" -m "${VPN_PROTO}" --sport "${VPN_PORT}"
 
 # allow traffic through VPN tunnel interface
 iptables -A INPUT -j ACCEPT -i tun+

@@ -14,14 +14,14 @@ LAN_SUBNET=$(echo "${LAN}" | cut -d"/" -f2)
 LAN_MASK=$(cdr2mask ${LAN_SUBNET})
 
 # launch openvpn
-exec s6-setuidgid $(id -u openvpn):$(id -g openvpn) openvpn \
+exec s6-setuidgid "$(id -u openvpn):$(id -g openvpn)" openvpn \
     --writepid /var/run/openvpn/pid \
     --iproute /usr/sbin/ip-su \
     --dev tun0 --persist-tun \
-    --config ${OPENVPN_CONFIG_FILE} \
-    --auth-user-pass ${CREDENTIALS_FILE} \
+    --config "${OPENVPN_CONFIG_FILE}" \
+    --auth-user-pass "${CREDENTIALS_FILE}" \
     --auth-nocache \
     --pull-filter ignore "dhcp-option DNS" \
-    --dhcp-option DNS ${DNS} \
+    --dhcp-option DNS "${DNS}" \
     --redirect-gateway def1 bypass-dhcp \
-    --route ${LAN_FIRST_IP} ${LAN_MASK} net_gateway
+    --route "${LAN_FIRST_IP}" "${LAN_MASK}" net_gateway
