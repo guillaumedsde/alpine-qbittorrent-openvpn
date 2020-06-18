@@ -7,20 +7,34 @@ DECTECTED_DOCKER_CIDR=$(ip -o -f inet addr show | awk '/scope global/ {print $4}
 DOCKER_CIDR=${DECTECTED_DOCKER_CIDR:-DOCKER_CIDR}
 
 # extract VPN protocol, host and port from configuration
-VPN_PROTO=$(awk '/proto / { print $2 }' "${OPENVPN_CONFIG_FILE}")
-VPN_HOST=$(awk '/remote / { print $2 }' "${OPENVPN_CONFIG_FILE}")
-VPN_PORT=$(awk '/remote / { print $3 }' "${OPENVPN_CONFIG_FILE}")
+CONFIG_PROTO=$(awk '/proto / { print $2 }' "${OPENVPN_CONFIG_FILE}")
+CONFIG_PORT=$(awk '/remote / { print $3 }' "${OPENVPN_CONFIG_FILE}")
+CONFIG_VPN_HOST=$(awk '/remote / { print $2 }' "${OPENVPN_CONFIG_FILE}")
+
+VPN_PROTO="${CONFIG_PROTO:=udp}"
+VPN_HOST="${CONFIG_VPN_HOST}"
+VPN_PORT="${CONFIG_PORT:=1194}"
 
 DNS_SERVER=${DNS}
 
 # Check that VPN information was sucessfully extracted from configuration
-if [[ -z "${VPN_PROTO}" || -z "${VPN_HOST}" || -z "${VPN_PORT}" ]]; then
-    echo "One of the following variables could not be detected in the VPN configuration:
+
+if [ -z "${VPN_HOST}" ]; then
+    echo "ERROR could not find VPN_HOST in the VPN configuration"
+    exit 1
+fi
+
+if [ -z "${VPN_PROTO}" || -z "${VPN_PORT}" ]; then
+    echo "INFO: One of the following variables could not be detected in the VPN configuration, fell back to default:
     VPN_PROTO:  $VPN_PROTO
     VPN_HOST:   $VPN_HOST
     VPN_PORT:   $VPN_PORT
     "
-    exit 1
+fi
+
+# change openvpn config 'tcp-client' to compatible iptables 'tcp'
+if [ "${VPN_PROTO}" == "tcp-client" ]; then
+    export VPN_PROTO="tcp"
 fi
 
 # reset iptables
