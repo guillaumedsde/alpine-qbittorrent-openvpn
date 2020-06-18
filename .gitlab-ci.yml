@@ -4,9 +4,10 @@ stages:
   - deploy
 
 fossa-license-scan:
-  image: debian:latest
+  image: alpine:latest
   stage: analyze
   before_script:
+    - apk add --no-cache bash curl
     - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | bash"
   script:
     - fossa init
