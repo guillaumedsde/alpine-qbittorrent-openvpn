@@ -3,7 +3,7 @@
 VERSION="$(git describe --abbrev=0)"
 
 if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then
-    TAGS="-t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${VERSION} -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:latest"
+    TAGS=" -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${VERSION} -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:latest "
 else
     # cleanup branch name
     BRANCH="$(echo "${CI_COMMIT_REF_NAME}" | tr / _)"
