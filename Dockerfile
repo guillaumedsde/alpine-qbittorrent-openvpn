@@ -1,7 +1,7 @@
 
 ARG BASE_IMAGE="alpine:3.12"
 # uncomment below to enable qbittorrent search engine
-# ARG BASE_IMAGE="python:3.12-alpine"
+# ARG BASE_IMAGE="python:3-alpine3.12"
 
 FROM ${BASE_IMAGE}
 
