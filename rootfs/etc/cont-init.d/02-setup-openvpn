@@ -51,7 +51,8 @@ else
 fi
 
 # get the provider's configuration
-wget "${OPENVPN_CONFIG_URL}" -O "${OPENVPN_CONFIG_FILE}"
+# while replacing space in url with %20
+wget "$(echo "${OPENVPN_CONFIG_URL}" | tr ' ' %20)" -O "${OPENVPN_CONFIG_FILE}"
 
 # verify the configuration was successfully downloaded
 if [ $? -ne 0 ]; then
