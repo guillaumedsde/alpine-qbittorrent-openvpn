@@ -95,6 +95,11 @@ Selecting a preloaded configuration works the same way as the haugene container 
 
 If your provider is not in the supported list, you can mount your `.ovpn` file at `/config/openvpn/config.ovpn` optionally set your `OPENVPN_USERNAME` and `OPENVPN_PASSWORD` leaving the `OPENVPN_PROVIDER` empty and the container will load your configuration upon start.
 
+## 🔍 qBittorrent torrent search
+
+In order to be as light as possible, the `latest` tagged docker image does not include python.
+This means that in order to use [qBittorrent's torrent Search functionality](https://www.ghacks.net/2018/11/19/searching-torrents-from-within-qbittorrent/) you have to use the version of this image based on the official python alpine docker image, this image is tagged `python`, in order to download it, please use `guillaumedsde/alpine-qbittorrent-openvpn:python`.
+
 ## 🐌 Limitations
 
 This image has a couple of limitations:
