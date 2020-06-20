@@ -50,9 +50,19 @@ else
     OPENVPN_CONFIG_URL="${VPN_PROVIDER_CONFIGS}/default.ovpn"
 fi
 
-# get the provider's configuration
-# while replacing space in url with %20
-wget "$(echo "${OPENVPN_CONFIG_URL}" | tr ' ' %20)" -O "${OPENVPN_CONFIG_FILE}"
+# Download all OpenVPN configurations from this provider
+(
+    cd /etc/openvpn
+    wget "https://codeload.github.com/haugene/docker-transmission-openvpn/tar.gz/master" -O - -o /dev/null |
+        tar -xz --strip=2 "docker-transmission-openvpn-master/openvpn/${lowercase_openvpn_provider}"
+)
+
+# modify ownership and permissions for downloaded config files
+chown -R openvpn:openvpn "/etc/openvpn/${lowercase_openvpn_provider}"
+chmod 0755 "${OPENVPN_CONFIG_FILE}"
+
+# Copy the selcted configuration to the expected location
+cp "/etc/openvpn/${lowercase_openvpn_provider}/${OPENVPN_CONFIG}.ovpn" "${OPENVPN_CONFIG_FILE}"
 
 # verify the configuration was successfully downloaded
 if [ $? -ne 0 ]; then
@@ -62,5 +72,6 @@ else
     echo "Found OpenVPN configuration: ${OPENVPN_CONFIG_FILE} for provider ${OPENVPN_PROVIDER} at ${OPENVPN_CONFIG_URL} using it"
 fi
 
+# set permissions on openvpn config files
 chown openvpn:openvpn "${OPENVPN_CONFIG_FILE}"
 chmod 0600 "${OPENVPN_CONFIG_FILE}"
