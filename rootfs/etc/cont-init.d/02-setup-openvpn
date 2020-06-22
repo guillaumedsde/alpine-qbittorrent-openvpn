@@ -35,20 +35,10 @@ if [ "${OPENVPN_PROVIDER}" == "**None**" ] || [ -z "${OPENVPN_PROVIDER-}" ]; the
     exit 0
 fi
 
-echo "Trying to use OpenVPN provider: ${OPENVPN_PROVIDER}"
+echo "INFO: Trying to use OpenVPN provider: ${OPENVPN_PROVIDER}"
 
 # build base URL for downloading VPN configuration
 lowercase_openvpn_provider=$(echo "${OPENVPN_PROVIDER}" | awk '{print tolower($0)}')
-VPN_PROVIDER_CONFIGS="https://raw.githubusercontent.com/haugene/docker-transmission-openvpn/master/openvpn/${lowercase_openvpn_provider}"
-
-# determine which configuration from the provider we are going to use
-# NOTE: some providers have a "default.ovpn", other do not
-if [ -n "${OPENVPN_CONFIG}" ]; then
-    OPENVPN_CONFIG_URL="${VPN_PROVIDER_CONFIGS}/${OPENVPN_CONFIG}.ovpn"
-else
-    echo "No VPN configuration provided. Using default."
-    OPENVPN_CONFIG_URL="${VPN_PROVIDER_CONFIGS}/default.ovpn"
-fi
 
 # Download all OpenVPN configurations from this provider
 (
@@ -57,21 +47,22 @@ fi
         tar -xz --strip=2 "docker-transmission-openvpn-master/openvpn/${lowercase_openvpn_provider}"
 )
 
-# modify ownership and permissions for downloaded config files
-chown -R openvpn:openvpn "/etc/openvpn/${lowercase_openvpn_provider}"
-chmod 0755 "${OPENVPN_CONFIG_FILE}"
+# determine which configuration from the provider we are going to use
+# NOTE: some providers have a "default.ovpn", other do not
+OPENVPN_CONFIG_FILENAME="${OPENVPN_CONFIG:-default}.ovpn"
+DOWNLOADED_OPENVPN_CONFIG_FILE="/etc/openvpn/${lowercase_openvpn_provider}/${OPENVPN_CONFIG_FILENAME}"
 
-# Copy the selcted configuration to the expected location
-cp "/etc/openvpn/${lowercase_openvpn_provider}/${OPENVPN_CONFIG}.ovpn" "${OPENVPN_CONFIG_FILE}"
-
-# verify the configuration was successfully downloaded
-if [ $? -ne 0 ]; then
-    echo "ERROR: Could not find OpenVPN configuration for provider ${OPENVPN_PROVIDER} at ${OPENVPN_CONFIG_URL}"
+# check if configuration exists for given provider
+if [ ! -f "${DOWNLOADED_OPENVPN_CONFIG_FILE}" ]; then
+    echo "ERROR: Could not find OpenVPN configuration \"${OPENVPN_CONFIG}\" for provider ${OPENVPN_PROVIDER}"
     exit 1
 else
-    echo "Found OpenVPN configuration: ${OPENVPN_CONFIG_FILE} for provider ${OPENVPN_PROVIDER} at ${OPENVPN_CONFIG_URL} using it"
+    echo "INFO: Found OpenVPN configuration: \"${OPENVPN_CONFIG}\" for provider \"${OPENVPN_PROVIDER}\" using it"
 fi
 
-# set permissions on openvpn config files
-chown openvpn:openvpn "${OPENVPN_CONFIG_FILE}"
-chmod 0600 "${OPENVPN_CONFIG_FILE}"
+# modify ownership and permissions for downloaded config files
+chown -R openvpn:openvpn "/etc/openvpn/${lowercase_openvpn_provider}"
+chmod 0600 "${DOWNLOADED_OPENVPN_CONFIG_FILE}"
+
+# Copy the selcted configuration to the expected location
+cp -p "${DOWNLOADED_OPENVPN_CONFIG_FILE}" "${OPENVPN_CONFIG_FILE}"
