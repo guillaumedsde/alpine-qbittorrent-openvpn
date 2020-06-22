@@ -67,6 +67,8 @@ services:
       - LAN=192.168.0.0/16
     ports:
       - "8080:8080"
+    cap_add:
+      - NET_ADMIN
     image: guillaumedsde/alpine-qbittorrent-openvpn:latest
 ```
 
