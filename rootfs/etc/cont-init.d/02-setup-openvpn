@@ -29,7 +29,7 @@ chown openvpn:openvpn "${CREDENTIALS_FILE}"
 chmod 0600 "${CREDENTIALS_FILE}"
 
 # check if VPN provider was defined
-if [ "${OPENVPN_PROVIDER}" == "**None**" ] || [ -z "${OPENVPN_PROVIDER-}" ]; then
+if [ -z "${OPENVPN_PROVIDER}" ]; then
     echo "OpenVPN provider not set. Using configuration at ${OPENVPN_CONFIG_FILE}"
     # if not fallback to given VPN configuration
     exit 0
@@ -64,5 +64,5 @@ fi
 chown -R openvpn:openvpn "/etc/openvpn/${lowercase_openvpn_provider}"
 chmod 0600 "${DOWNLOADED_OPENVPN_CONFIG_FILE}"
 
-# Copy the selcted configuration to the expected location
+# Copy the selected configuration to the expected location
 cp -p "${DOWNLOADED_OPENVPN_CONFIG_FILE}" "${OPENVPN_CONFIG_FILE}"
