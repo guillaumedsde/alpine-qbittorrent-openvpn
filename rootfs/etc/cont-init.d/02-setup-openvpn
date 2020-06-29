@@ -43,8 +43,7 @@ lowercase_openvpn_provider=$(echo "${OPENVPN_PROVIDER}" | awk '{print tolower($0
 # Download all OpenVPN configurations from this provider
 (
     cd /etc/openvpn
-    wget "https://codeload.github.com/haugene/docker-transmission-openvpn/tar.gz/master" -O - -o /dev/null |
-        tar -xz --strip=2 "docker-transmission-openvpn-master/openvpn/${lowercase_openvpn_provider}"
+    svn export "https://github.com/haugene/docker-transmission-openvpn.git/trunk/openvpn/${lowercase_openvpn_provider}"
 )
 
 # determine which configuration from the provider we are going to use
