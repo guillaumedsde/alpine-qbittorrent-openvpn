@@ -95,7 +95,7 @@ Selecting a preloaded configuration works the same way as the haugene container 
 
 ### Custom OpenVPN config
 
-If your provider is not in the supported list, you can mount your `.ovpn` file at `/config/openvpn/config.ovpn` optionally set your `OPENVPN_USERNAME` and `OPENVPN_PASSWORD` leaving the `OPENVPN_PROVIDER` empty and the container will load your configuration upon start.
+If your provider is not in the supported list or if is currently not working, you can mount your `.ovpn` file at `/config/openvpn/config.ovpn` optionally set your `OPENVPN_USERNAME` and `OPENVPN_PASSWORD` leaving the `OPENVPN_PROVIDER` empty and the container will load your configuration upon start.
 
 ## 🔍 qBittorrent torrent search
 
@@ -109,7 +109,6 @@ This image has a couple of limitations:
 - **No port forwarding** I will start working on this when I have some time
 - **No IPv6 support** I have not installed iptables for IPv6 as such the firewall kill switch will probably not work with IPv6 (I have not tested it) if you need it, [file an issue](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/new/choose) and I'll look into it when I have some time
 - **No support for docker's built in DNS server** Docker has an embedded DNS server that containers query to get the IPs of other containers, however, Docker does some [weird](https://stackoverflow.com/a/50730336) [iptables](https://stackoverflow.com/questions/41707573/how-does-docker-embedded-dns-resolver-work/50730336) trick to redirect containers' DNS requests to its resolver at `127.0.0.11`. I have not managed to write proper iptables rules to allow this traffic, if you have any idea how, [leave an issue](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/new/choose) 🙂. In the meantime, the container's DNS resolver is set using the `DNS` environment variable
-- **Automatic restarts** I am looking into improving this to make the container more resilient
 
 ## 🙏 Credits
 
