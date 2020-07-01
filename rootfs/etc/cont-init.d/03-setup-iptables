@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv sh
 
 # extract docker network CIDR notation
-DECTECTED_DOCKER_CIDR=$(ip -o -f inet addr show | awk '/scope global/ {print $4}')
+DECTECTED_DOCKER_CIDR="$(ip -o -f inet addr show | awk '/scope global/ {print $4}')"
 
 # fallback to DOCKER_CIDR if no DECTECTED_DOCKER_CIDR
 DOCKER_CIDR="${DECTECTED_DOCKER_CIDR:-DOCKER_CIDR}"
@@ -15,7 +15,7 @@ VPN_PROTO="${CONFIG_PROTO:=udp}"
 VPN_HOST="${CONFIG_VPN_HOST}"
 VPN_PORT="${CONFIG_PORT:=1194}"
 
-DNS_SERVER=${DNS}
+DNS_SERVER="${DNS}"
 
 # Check that VPN information was sucessfully extracted from configuration
 
@@ -55,18 +55,18 @@ iptables -A OUTPUT -j ACCEPT -o lo
 # allow DNS traffic outside VPN tunnel with given DNS resolver only on UDP and DNS port
 
 # NOTE: these rules are dropped before starting qbittorrent
-iptables -A OUTPUT -p udp -d "${DNS_SERVER}" --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p udp -s "${DNS_SERVER}" --sport 53 -m state --state ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p tcp -d "${DNS_SERVER}" --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p tcp -s "${DNS_SERVER}" --sport 53 -m state --state ESTABLISHED -j ACCEPT
+nft add rule ip filter OUTPUT ip protocol 17 ip daddr "${DNS_SERVER}" udp dport 53 ct state new,established counter accept
+nft add rule ip filter INPUT ip protocol 17 ip saddr "${DNS_SERVER}" udp sport 53 ct state established counter accept
+nft add rule ip filter OUTPUT ip protocol 6 ip daddr "${DNS_SERVER}" tcp dport 53 ct state new,established counter accept
+nft add rule ip filter INPUT ip protocol 6 ip saddr "${DNS_SERVER}" tcp sport 53 ct state established counter accept
 
 # allow LAN traffic
-iptables -A INPUT --src "${LAN}" -j ACCEPT -i eth+
-iptables -A OUTPUT -d "${LAN}" -j ACCEPT -o eth+
+nft add rule ip filter INPUT iifname "eth*" ip saddr "${LAN}" counter accept
+nft add rule ip filter OUTPUT oifname "eth*" ip daddr "${LAN}" counter accept
 
 # allow traffic with other containers on docker network
-iptables -A INPUT --src "${DOCKER_CIDR}" -j ACCEPT -i eth+
-iptables -A OUTPUT -d "${DOCKER_CIDR}" -j ACCEPT -o eth+
+nft add rule ip filter INPUT iifname "eth*" ip saddr "${DOCKER_CIDR}" counter accept
+nft add rule ip filter OUTPUT oifname "eth*" ip daddr"${DOCKER_CIDR}" counter accept
 
 # allow traffic with VPN host over VPN's port and with VPN's protocol
 iptables -A OUTPUT -j ACCEPT -d "${VPN_HOST}" -o eth+ -p "${VPN_PROTO}" -m "${VPN_PROTO}" --dport "${VPN_PORT}"
