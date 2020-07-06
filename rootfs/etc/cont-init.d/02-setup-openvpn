@@ -65,3 +65,6 @@ chmod 0600 "${DOWNLOADED_OPENVPN_CONFIG_FILE}"
 
 # Copy the selected configuration to the expected location
 cp -p "${DOWNLOADED_OPENVPN_CONFIG_FILE}" "${OPENVPN_CONFIG_FILE}"
+
+chown -R openvpn:openvpn "$(dirname ${OPENVPN_CONFIG_FILE})"
+chmod 0700 "$(dirname ${OPENVPN_CONFIG_FILE})"
