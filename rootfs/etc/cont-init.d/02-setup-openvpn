@@ -1,5 +1,7 @@
 #!/usr/bin/with-contenv sh
 
+chmod 775 /config
+
 # create TUN device
 s6-mkdir -p /dev/net
 if [ ! -c "${TUN}" ]; then
@@ -8,13 +10,10 @@ fi
 chmod 666 "${TUN}"
 
 s6-mkdir -p \
-    '/var/log/openvpn' \
     '/var/run/openvpn'
 chown -fR openvpn:openvpn \
-    '/var/log/openvpn' \
     '/var/run/openvpn' || :
 chmod -fR a=,ug+rwX \
-    '/var/log/openvpn' \
     '/var/run/openvpn' || :
 openvpn \
     --mktun --dev 'tun0' --dev-type 'tun' \
@@ -32,41 +31,42 @@ chmod 0600 "${CREDENTIALS_FILE}"
 if [ -z "${OPENVPN_PROVIDER}" ]; then
     echo "OpenVPN provider not set. Using configuration at ${OPENVPN_CONFIG_FILE}"
     # if not fallback to given VPN configuration
-    exit 0
-fi
 
-echo "INFO: Trying to use OpenVPN provider: ${OPENVPN_PROVIDER}"
-
-# build base URL for downloading VPN configuration
-lowercase_openvpn_provider=$(echo "${OPENVPN_PROVIDER}" | awk '{print tolower($0)}')
-
-# Download all OpenVPN configurations from this provider
-(
-    cd /etc/openvpn
-    svn export "https://github.com/haugene/docker-transmission-openvpn.git/trunk/openvpn/${lowercase_openvpn_provider}" --force
-)
-
-# determine which configuration from the provider we are going to use
-# NOTE: some providers have a "default.ovpn", other do not
-OPENVPN_CONFIG_FILENAME="${OPENVPN_CONFIG:-default}.ovpn"
-DOWNLOADED_OPENVPN_CONFIG_FILE="/etc/openvpn/${lowercase_openvpn_provider}/${OPENVPN_CONFIG_FILENAME}"
-
-# check if configuration exists for given provider
-if [ ! -f "${DOWNLOADED_OPENVPN_CONFIG_FILE}" ]; then
-    echo "ERROR: Could not find OpenVPN configuration \"${OPENVPN_CONFIG}\" for provider ${OPENVPN_PROVIDER}"
-    exit 1
 else
-    echo "INFO: Found OpenVPN configuration: \"${OPENVPN_CONFIG}\" for provider \"${OPENVPN_PROVIDER}\" using it"
+    echo "INFO: Trying to use OpenVPN provider: ${OPENVPN_PROVIDER}"
+
+    # build base URL for downloading VPN configuration
+    lowercase_openvpn_provider=$(echo "${OPENVPN_PROVIDER}" | awk '{print tolower($0)}')
+
+    # Download all OpenVPN configurations from this provider
+    (
+        cd "/etc/openvpn"
+        svn export "https://github.com/haugene/docker-transmission-openvpn.git/trunk/openvpn/${lowercase_openvpn_provider}" --force
+    )
+
+    # determine which configuration from the provider we are going to use
+    # NOTE: some providers have a "default.ovpn", other do not
+    OPENVPN_CONFIG_FILENAME="${OPENVPN_CONFIG:-default}.ovpn"
+    DOWNLOADED_OPENVPN_CONFIG_FILE="/etc/openvpn/${lowercase_openvpn_provider}/${OPENVPN_CONFIG_FILENAME}"
+
+    # check if configuration exists for given provider
+    if [ ! -f "${DOWNLOADED_OPENVPN_CONFIG_FILE}" ]; then
+        echo "ERROR: Could not find OpenVPN configuration \"${OPENVPN_CONFIG}\" for provider ${OPENVPN_PROVIDER}"
+        exit 1
+    else
+        echo "INFO: Found OpenVPN configuration: \"${OPENVPN_CONFIG}\" for provider \"${OPENVPN_PROVIDER}\" using it"
+    fi
+
+    # modify permissions for downloaded config files
+    find "/etc/openvpn/${lowercase_openvpn_provider}" -type d -exec chmod 755 {} +
+    find "/etc/openvpn/${lowercase_openvpn_provider}" -type f -exec chmod 644 {} +
+
+    # Copy the selected configuration to the expected location
+    cp -p "${DOWNLOADED_OPENVPN_CONFIG_FILE}" "${OPENVPN_CONFIG_FILE}"
 fi
-
-# modify permissions for downloaded config files
-find "/etc/openvpn/${lowercase_openvpn_provider}" -type d -exec chmod 755 {} +
-find "/etc/openvpn/${lowercase_openvpn_provider}" -type f -exec chmod 644 {} +
-
-# Copy the selected configuration to the expected location
-cp -p "${DOWNLOADED_OPENVPN_CONFIG_FILE}" "${OPENVPN_CONFIG_FILE}"
 
 OPENVPN_CONFIG_DIR="$(dirname ${OPENVPN_CONFIG_FILE})"
 
-find "${OPENVPN_CONFIG_DIR}" -type d -exec chmod 755 {} +
-find "${OPENVPN_CONFIG_DIR}" -type f -exec chmod 644 {} +
+chown -R openvpn:openvpn "${OPENVPN_CONFIG_DIR}"
+find "${OPENVPN_CONFIG_DIR}" -type d -exec chmod 700 {} +
+find "${OPENVPN_CONFIG_DIR}" -type f -exec chmod 600 {} +

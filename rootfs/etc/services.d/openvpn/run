@@ -16,6 +16,7 @@ LAN_MASK=$(cdr2mask ${LAN_SUBNET})
 # launch openvpn
 exec s6-setuidgid "$(id -u openvpn):$(id -g openvpn)" openvpn \
     --writepid /var/run/openvpn/pid \
+    --cd "$(dirname ${OPENVPN_CONFIG_FILE})" \
     --iproute /usr/sbin/ip-su \
     --dev tun0 --persist-tun \
     --config "${OPENVPN_CONFIG_FILE}" \

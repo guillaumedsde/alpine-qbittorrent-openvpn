@@ -25,7 +25,6 @@ ARG S6_VERSION=v2.0.0.1
 RUN addgroup -S openvpn \
     && adduser -SD \
     -s /sbin/nologin \
-    -h /var/lib/openvpn \
     -g openvpn \
     -G openvpn \
     openvpn \
