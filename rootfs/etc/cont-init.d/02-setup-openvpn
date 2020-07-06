@@ -59,12 +59,14 @@ else
     echo "INFO: Found OpenVPN configuration: \"${OPENVPN_CONFIG}\" for provider \"${OPENVPN_PROVIDER}\" using it"
 fi
 
-# modify ownership and permissions for downloaded config files
-chown -R openvpn:openvpn "/etc/openvpn/${lowercase_openvpn_provider}"
-chmod 0600 "${DOWNLOADED_OPENVPN_CONFIG_FILE}"
+# modify permissions for downloaded config files
+find "/etc/openvpn/${lowercase_openvpn_provider}" -type d -exec chmod 755 {} +
+find "/etc/openvpn/${lowercase_openvpn_provider}" -type f -exec chmod 644 {} +
 
 # Copy the selected configuration to the expected location
 cp -p "${DOWNLOADED_OPENVPN_CONFIG_FILE}" "${OPENVPN_CONFIG_FILE}"
 
-chown -R openvpn:openvpn "$(dirname ${OPENVPN_CONFIG_FILE})"
-chmod 0700 "$(dirname ${OPENVPN_CONFIG_FILE})"
+OPENVPN_CONFIG_DIR="$(dirname ${OPENVPN_CONFIG_FILE})"
+
+find "${OPENVPN_CONFIG_DIR}" -type d -exec chmod 755 {} +
+find "${OPENVPN_CONFIG_DIR}" -type f -exec chmod 644 {} +
