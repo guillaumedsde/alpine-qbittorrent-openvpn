@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then
-    VERSION="$(git describe --abbrev=0)"
+    VERSION="$(git rev-parse --short HEAD)"
     # build python version
     docker buildx build . \
         --platform="${BUILDX_PLATFORM}" \
