@@ -1,6 +1,6 @@
 ---
 name: Report a bug
-about: Use this template for reporting a bug.
+about: Fill in this template for reporting a bug.
 title: "bug"
 labels: bug
 assignees: guillaumedsde
