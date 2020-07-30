@@ -23,9 +23,10 @@ The image aims to be safe, small and generally minimal by installing as little d
 - 🏔️ Alpine Linux small and secure base Docker image
 - 🤏 As few Docker layers as possible
 - 🛡️ Minimal software dependencies installed
+- 🛡️ Runs as unprivileged user with minimal permissions
 - 🖥️ Built for many platforms
 - 🚇 Compatible with most OpenVPN providers
-- 🛡️ Runs as unprivileged user with minimal permissions
+- ↔️ Port forwarding support for PrivateVPN, Private Internet Access and Perfect Privacy
 
 ## 🏁 How to Run
 
@@ -106,7 +107,6 @@ This means that in order to use [qBittorrent's torrent Search functionality](htt
 
 This image has a couple of limitations:
 
-- **No port forwarding** I will start working on this when I have some time
 - **No IPv6 support** I have not installed iptables for IPv6 as such the firewall kill switch will probably not work with IPv6 (I have not tested it) if you need it, [file an issue](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/new/choose) and I'll look into it when I have some time
 - **No support for docker's built in DNS server** Docker has an embedded DNS server that containers query to get the IPs of other containers, however, Docker does some [weird](https://stackoverflow.com/a/50730336) [iptables](https://stackoverflow.com/questions/41707573/how-does-docker-embedded-dns-resolver-work/50730336) trick to redirect containers' DNS requests to its resolver at `127.0.0.11`. I have not managed to write proper iptables rules to allow this traffic, if you have any idea how, [leave an issue](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/new/choose) 🙂. In the meantime, the container's DNS resolver is set using the `DNS` environment variable
 
@@ -115,7 +115,7 @@ This image has a couple of limitations:
 A couple of projects really helped me out while developing this container:
 
 - 🍻 [0x022b/s6-openvpn](https://github.com/0x022b/s6-openvpn) for figuring out how the S6 overlay works, and for most of the code to run OpenVPN as an unprivileged user
-- 🍻 [haugene/docker-transmission-openvpn](https://github.com/haugene/docker-transmission-openvpn) for general inspiration for the project and specifically, the OpenVPN configurations and the healthcheck script adapted in this repository
+- 🍻 [haugene/docker-transmission-openvpn](https://github.com/haugene/docker-transmission-openvpn) for general inspiration for the project and specifically, the OpenVPN configurations, the port forwarding and healthcheck scripts adapted in this repository
 - 🏁 [s6-overlay](https://github.com/just-containers/s6-overlay) A simple, relatively small yet powerful set of init script for managing processes (especially in docker containers)
 - 🏔️ [Alpine Linux](https://alpinelinux.org/) an awesome lightweight secure linux distribution used as the base for this container
 - 🐋 The [Docker](https://github.com/docker) project (of course)
