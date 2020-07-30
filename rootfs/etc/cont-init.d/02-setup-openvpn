@@ -65,8 +65,4 @@ else
     cp -p "${DOWNLOADED_OPENVPN_CONFIG_FILE}" "${OPENVPN_CONFIG_FILE}"
 fi
 
-OPENVPN_CONFIG_DIR="$(dirname ${OPENVPN_CONFIG_FILE})"
-
-chown -R openvpn:openvpn "${OPENVPN_CONFIG_DIR}"
-find "${OPENVPN_CONFIG_DIR}" -type d -exec chmod 700 {} +
-find "${OPENVPN_CONFIG_DIR}" -type f -exec chmod 600 {} +
+chown openvpn:openvpn "${OPENVPN_CONFIG_FILE}"
