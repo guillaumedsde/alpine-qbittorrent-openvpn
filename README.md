@@ -3,7 +3,6 @@
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/guillaumedsde/alpine-qbittorrent-openvpn)](https://gitlab.com/guillaumedsde/alpine-qbittorrent-openvpn/-/pipelines)
 [![Website](https://img.shields.io/website?label=documentation&url=https%3A%2F%2Fguillaumedsde.gitlab.io%2Falpine-qbittorrent-openvpn%2F)](https://guillaumedsde.gitlab.io/alpine-qbittorrent-openvpn/)
-[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/guillaumedsde/alpine-qbittorrent-openvpn?label=version)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/releases)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9a0f16575d634e449a5b31c1e7439779)](https://www.codacy.com/manual/guillaumedsde/alpine-qbittorrent-openvpn?utm_source=gitlab.com&utm_medium=referral&utm_content=guillaumedsde/alpine-qbittorrent-openvpn&utm_campaign=Badge_Grade)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
 [![Docker Pulls](https://img.shields.io/docker/pulls/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
