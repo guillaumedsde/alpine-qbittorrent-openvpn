@@ -1,3 +1,11 @@
+---
+name: Report a bug
+about: Use this template for reporting a bug.
+title: "bug"
+labels: bug
+assignees: guillaumedsde
+---
+
 ## Information
 
 _describe the issue_
