@@ -15,4 +15,18 @@ for rule in "OUTPUT -p udp -d ${DNS} --dport 53 -m state --state NEW,ESTABLISHED
     fi
 done
 
+if [[ "${OPENVPN_PROVIDER}" = "PIA" ]]; then
+    echo "INFO: configuring port forwarding for ${OPENVPN_PROVIDER}"
+    /usr/sbin/pia_port.sh
+# not currently implemented
+# elif [[ "${OPENVPN_PROVIDER}" = "PERFECTPRIVACY" ]]; then
+#     echo "CONFIGURING PORT FORWARDING"
+#     exec /etc/transmission/updatePPPort.sh ${TRANSMISSION_BIND_ADDRESS_IPV4} &
+elif [[ "${OPENVPN_PROVIDER}" = "PRIVATEVPN" ]]; then
+    echo "INFO: configuring port forwarding for ${OPENVPN_PROVIDER}"
+    /usr/sbin/private_vpn_port.sh
+else
+    echo "INFO: no port updater for provider ${OPENVPN_PROVIDER}"
+fi
+
 exec s6-setuidgid "${PUID}:${PGID}" qbittorrent-nox

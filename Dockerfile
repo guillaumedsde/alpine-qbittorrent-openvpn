@@ -32,6 +32,7 @@ RUN addgroup -S openvpn \
     && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
     && apk add --no-cache \
     openvpn \
+    curl \
     iptables \
     libcap \
     sudo \
