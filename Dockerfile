@@ -3,6 +3,13 @@ ARG BASE_IMAGE="alpine:3.12"
 # uncomment below to enable qbittorrent search engine
 # ARG BASE_IMAGE="python:3-alpine3.12"
 
+
+FROM alpine:latest as builder
+
+RUN wget https://raw.githubusercontent.com/guillaumedsde/qbittorrent-nox-static/master/build/build.sh \
+    && chmod 700 build.sh \
+    && ./build.sh
+
 FROM ${BASE_IMAGE}
 
 # Build-time metadata as defined at http://label-schema.org
@@ -29,8 +36,6 @@ RUN addgroup -S openvpn \
     -G openvpn \
     openvpn \
     && ARCH="$(uname -m)" \
-    && apk add --no-cache libtorrent-rasterbar=1.2.6 \
-    && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
     && apk add --no-cache \
     openvpn \
     curl \
@@ -51,6 +56,8 @@ RUN addgroup -S openvpn \
     && wget "https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${S6_ARCH}.tar.gz" \
     && tar xzf "s6-overlay-${S6_ARCH}.tar.gz" -C / \ 
     && rm "s6-overlay-${S6_ARCH}.tar.gz"
+
+COPY --from=builder /usr/local/bin/qbittorrent-nox /usr/local/bin/qbittorrent-nox
 
 COPY rootfs /
 
