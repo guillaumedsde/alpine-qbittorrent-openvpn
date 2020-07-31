@@ -29,6 +29,7 @@ RUN addgroup -S openvpn \
     -G openvpn \
     openvpn \
     && ARCH="$(uname -m)" \
+    && apk add --no-cache libtorrent-rasterbar=1.2.6 \
     && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
     && apk add --no-cache \
     openvpn \
