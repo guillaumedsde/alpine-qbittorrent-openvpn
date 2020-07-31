@@ -14,7 +14,7 @@ build-containers:
     DOCKER_CLI_EXPERIMENTAL: enabled
     BUILDX_URL: https://github.com/docker/buildx/releases/latest/download/buildx-v0.4.1.linux-amd64
     BUILDX_BUILDER: builder
-    BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
+    BUILDX_PLATFORM: linux/arm/v7,linux/arm/v6
   before_script:
     - chmod +x ./build/prepare_builder.sh
     - . ./build/prepare_builder.sh
