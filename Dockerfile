@@ -22,14 +22,14 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 
 ARG S6_VERSION=v2.0.0.1
 
+COPY install_qbittorrent_with_s6.sh /install_qbittorrent_with_s6.sh
+
 RUN addgroup -S openvpn \
     && adduser -SD \
     -s /sbin/nologin \
     -g openvpn \
     -G openvpn \
     openvpn \
-    && ARCH="$(uname -m)" \
-    && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
     && apk add --no-cache \
     openvpn \
     curl \
@@ -40,16 +40,9 @@ RUN addgroup -S openvpn \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && echo building for "${ARCH}" \
-    && if [ "${ARCH}" = "x86_64" ]; then S6_ARCH=amd64; \
-    elif [ "${ARCH}" = "i386" ]; then S6_ARCH=X86; \
-    elif echo "${ARCH}" | grep -E -q "armv6|armv7"; then S6_ARCH=arm; \
-    else S6_ARCH="${ARCH}"; \
-    fi \
-    && echo using architecture "${S6_ARCH}" for S6 Overlay \
-    && wget "https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${S6_ARCH}.tar.gz" \
-    && tar xzf "s6-overlay-${S6_ARCH}.tar.gz" -C / \ 
-    && rm "s6-overlay-${S6_ARCH}.tar.gz"
+    && chmod +x /install_qbittorrent_with_s6.sh \
+    && /install_qbittorrent_with_s6.sh \
+    && rm /install_qbittorrent_with_s6.sh
 
 COPY rootfs /
 
