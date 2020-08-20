@@ -2,6 +2,9 @@
 ARCH="$(uname -m)"
 echo "building for ${ARCH}"
 
+QBT_VERSION=4.2.5
+QBT_RELEASE=r0
+
 if [ "${ARCH}" = "x86_64" ]; then
     S6_ARCH=amd64
     qbit_arch="${S6_ARCH}"
@@ -23,7 +26,7 @@ tar xzf "s6-overlay-${S6_ARCH}.tar.gz" -C /
 rm "s6-overlay-${S6_ARCH}.tar.gz"
 
 if [ -n "$qbit_arch" ]; then
-    wget "https://github.com/guillaumedsde/qbittorrent-nox-static/releases/download/4.2.5-r0/qbittorrent-nox-v4.2.5-static-${qbit_arch}" -O /usr/bin/qbittorrent-nox
+    wget "https://github.com/guillaumedsde/qbittorrent-nox-static/releases/download/${QBT_VERSION}-${QBT_RELEASE}/qbittorrent-nox-v${QBT_VERSION}-static-${qbit_arch}" -O /usr/bin/qbittorrent-nox
     chmod +x /usr/bin/qbittorrent-nox
 else
     apk add --no-cache -X "http://dl-cdn.alpinelinux.org/alpine/edge/testing" qbittorrent-nox
