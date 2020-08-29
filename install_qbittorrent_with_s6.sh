@@ -1,4 +1,5 @@
 #!/bin/sh
+set -x
 ARCH="$(uname -m)"
 echo "building for ${ARCH}"
 
