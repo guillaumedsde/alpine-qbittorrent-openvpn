@@ -27,6 +27,7 @@ build-containers:
       - rootfs/**/*
       - .gitlab-ci.yml
       - build/**/*
+      - install_qbittorrent_with_s6.sh
 
 # the 'pages' job will deploy and build your site to the 'public' path
 dockerhub-readme:
