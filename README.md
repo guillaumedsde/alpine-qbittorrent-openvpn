@@ -93,9 +93,24 @@ This image makes use of the [VPN providers'](https://haugene.github.io/docker-tr
 It is possible I might have messed something up, so if one provider is not working for you, make sure to [leave an issue](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/new/choose) on this repository's Github page.
 Selecting a preloaded configuration works the same way as the haugene container (see below for an example).
 
+### OpenVPN_CONFIG Examples
+
+> refer to: https://github.com/haugene/docker-transmission-openvpn/tree/master/openvpn to find your configuration
+
+#### PureVPN
+
+OPENVPN_CONFIG=de2-ovp-tcp
+
+#### SurfShark
+OPENVPN_CONFIG=de-fra_tcp
+
 ### Custom OpenVPN config
 
 If your provider is not in the supported list or if is currently not working, you can mount your `.ovpn` file at `/config/openvpn/config.ovpn` optionally set your `OPENVPN_USERNAME` and `OPENVPN_PASSWORD` leaving the `OPENVPN_PROVIDER` empty and the container will load your configuration upon start.
+
+## 🔍 qBittorrent Web UI login
+
+The default username is admin and the default password is: adminadmin
 
 ## 🔍 qBittorrent torrent search
 
