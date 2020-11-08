@@ -3,6 +3,7 @@ ARG BASE_IMAGE="alpine:3.12"
 # uncomment below to enable qbittorrent search engine
 # ARG BASE_IMAGE="python:3-alpine3.12"
 
+# hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
 # Build-time metadata as defined at http://label-schema.org
