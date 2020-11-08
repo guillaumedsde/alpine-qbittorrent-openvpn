@@ -20,4 +20,3 @@ if [ -n "$qbit_arch" ]; then
 else
     apk add --no-cache -X "http://dl-cdn.alpinelinux.org/alpine/edge/testing" qbittorrent-nox
 fi
-z
