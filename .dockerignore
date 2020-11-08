@@ -3,4 +3,4 @@
 
 # Allow files and directories
 !rootfs/
-!build/install_s6.sh
+!build/install_*.sh

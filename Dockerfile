@@ -20,7 +20,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0"
 
-COPY build/install_s6.sh /install_s6.sh
+COPY build/install_*.sh /
 
 RUN addgroup -S openvpn \
     && adduser -SD \
@@ -28,7 +28,6 @@ RUN addgroup -S openvpn \
     -g openvpn \
     -G openvpn \
     openvpn \
-    && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing qbittorrent-nox \
     && apk add --no-cache \
     openvpn \
     curl \
@@ -39,9 +38,10 @@ RUN addgroup -S openvpn \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && chmod +x /install_s6.sh \
+    && chmod +x /install_*.sh \
     && /install_s6.sh \
-    && rm /install_s6.sh
+    && /install_qbittorrent.sh \
+    && rm /install_*.sh
 
 COPY rootfs /
 
