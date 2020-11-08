@@ -31,8 +31,6 @@ build:
     - update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
     - chmod +x ./build/build.sh
     - . ./build/build.sh
-  after_script:
-    - docker build rm
   only:
     changes:
       - Dockerfile
