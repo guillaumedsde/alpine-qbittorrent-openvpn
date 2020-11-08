@@ -20,7 +20,7 @@ build:
     DOCKER_DRIVER: overlay2
     BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
   before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
     # Use docker-container driver to allow useful features (push/multi-platform)
     - docker context create MyContext
