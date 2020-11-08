@@ -3,7 +3,6 @@
 # Settings
 
 pia_client_id_file=/config/openvpn/pia_client_id
-transmission_settings_file=${TRANSMISSION_HOME}/settings.json
 
 #
 # First get a port from PIA
