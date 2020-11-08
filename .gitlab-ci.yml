@@ -6,21 +6,33 @@ variables:
   DOCKER_HOST: tcp://docker:2375/
 
 build:
-  image: jonoh/docker-buildx-qemu
+  image: registry.gitlab.com/ix.ai/docker-buildx-qemu:latest
   stage: build
-  variables:
-    BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
   services:
     - docker:dind
+  retry: 2
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_CERT_PATH: "/certs/client"
+    DOCKER_TLS: 'true'
+    DOCKER_HOST: tcp://docker:2376/
+    BUILDKIT_INLINE_CACHE: '1'
+    DOCKER_DRIVER: overlay2
+    BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
   before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
     # Use docker-container driver to allow useful features (push/multi-platform)
-    - docker buildx create --driver docker-container --use
+    - docker context create MyContext
+    - docker buildx create --driver docker-container --name MyContext --use MyContext
     - docker buildx inspect --bootstrap
   script:
+    - docker buildx ls
     - update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
     - chmod +x ./build/build.sh
     - . ./build/build.sh
+  after_script:
+    - docker build rm
   only:
     changes:
       - Dockerfile
