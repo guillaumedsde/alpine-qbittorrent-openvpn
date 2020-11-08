@@ -3,4 +3,4 @@
 
 # Allow files and directories
 !rootfs/
-!install_qbittorrent_with_s6.sh
+!install_s6.sh
