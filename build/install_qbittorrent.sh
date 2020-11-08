@@ -7,9 +7,9 @@ QBT_VERSION=4.3.0.1
 QBT_RELEASE=r4
 
 if [ "${ARCH}" = "x86_64" ]; then
-    qbit_arch="${S6_ARCH}"
+    qbit_arch="amd64"
 elif echo "${ARCH}" | grep -E -q "armv6|armv7"; then
-    qbit_arch="${S6_ARCH}"
+    qbit_arch="arm"
 elif echo "${ARCH}" | grep -E -q "aarch64_be|aarch64|armv8b|armv8l|arm64"; then
     qbit_arch=arm64
 fi
@@ -20,3 +20,4 @@ if [ -n "$qbit_arch" ]; then
 else
     apk add --no-cache -X "http://dl-cdn.alpinelinux.org/alpine/edge/testing" qbittorrent-nox
 fi
+z
