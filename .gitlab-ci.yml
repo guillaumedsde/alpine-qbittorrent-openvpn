@@ -2,23 +2,33 @@ stages:
   - build
   - deploy
 
-build-containers:
-  image: docker:latest
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+
+build:
+  image: registry.gitlab.com/ix.ai/docker-buildx-qemu:latest
   stage: build
   services:
-    - name: "docker:dind"
-      command: ["--experimental"]
+    - docker:dind
+  retry: 2
   variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_CERT_PATH: "/certs/client"
+    DOCKER_TLS: 'true'
+    DOCKER_HOST: tcp://docker:2376/
+    BUILDKIT_INLINE_CACHE: '1'
     DOCKER_DRIVER: overlay2
-    DOCKER_BUILDKIT: 1
-    DOCKER_CLI_EXPERIMENTAL: enabled
-    BUILDX_URL: https://github.com/docker/buildx/releases/download/v0.4.2/buildx-v0.4.2.linux-amd64
-    BUILDX_BUILDER: builder
     BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
   before_script:
-    - chmod +x ./build/prepare_builder.sh
-    - . ./build/prepare_builder.sh
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
+    - update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
+    # Use docker-container driver to allow useful features (push/multi-platform)
+    - docker context create MyContext
+    - docker buildx create --driver docker-container --name MyContext --use MyContext
+    - docker buildx inspect --bootstrap
   script:
+    - docker buildx ls
+    - update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
     - chmod +x ./build/build.sh
     - . ./build/build.sh
   only:
@@ -27,7 +37,6 @@ build-containers:
       - rootfs/**/*
       - .gitlab-ci.yml
       - build/**/*
-      - install_qbittorrent_with_s6.sh
 
 # the 'pages' job will deploy and build your site to the 'public' path
 dockerhub-readme:

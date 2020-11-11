@@ -17,5 +17,5 @@ else
     # Ensure config directory is created
     mkdir -p $(dirname "$QBT_CONFIG_FILE")
     # Create the configuration file from a template and environment variables
-    echo "[Preferences]\nConnection\\PortRangeMin=\'$port\'" >"$QBT_CONFIG_FILE"
+    printf "[Preferences]\nConnection\\PortRangeMin=\'$port\'\n" >"$QBT_CONFIG_FILE"
 fi

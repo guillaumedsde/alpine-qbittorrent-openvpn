@@ -3,6 +3,7 @@ ARG BASE_IMAGE="alpine:3.12"
 # uncomment below to enable qbittorrent search engine
 # ARG BASE_IMAGE="python:3-alpine3.12"
 
+# hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
 # Build-time metadata as defined at http://label-schema.org
@@ -20,9 +21,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0"
 
-ARG S6_VERSION=v2.0.0.1
-
-COPY install_qbittorrent_with_s6.sh /install_qbittorrent_with_s6.sh
+COPY build/install_*.sh /
 
 RUN addgroup -S openvpn \
     && adduser -SD \
@@ -40,9 +39,10 @@ RUN addgroup -S openvpn \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && chmod +x /install_qbittorrent_with_s6.sh \
-    && /install_qbittorrent_with_s6.sh \
-    && rm /install_qbittorrent_with_s6.sh
+    && chmod +x /install_*.sh \
+    && /install_s6.sh \
+    && /install_qbittorrent.sh \
+    && rm /install_*.sh
 
 COPY rootfs /
 

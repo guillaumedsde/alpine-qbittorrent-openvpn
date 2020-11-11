@@ -4,8 +4,8 @@
 
 IPADDRESS=$1
 echo "ipAddress to calculate port from $IPADDRESS"
-oct3=$(echo ${IPADDRESS} | tr "." " " | awk '{ print $3 }')
-oct4=$(echo ${IPADDRESS} | tr "." " " | awk '{ print $4 }')
+oct3=$(echo "${IPADDRESS}" | tr "." " " | awk '{ print $3 }')
+oct4=$(echo "${IPADDRESS}" | tr "." " " | awk '{ print $4 }')
 oct3binary=$(bc <<<"obase=2;$oct3" | awk '{ len = (8 - length % 8) % 8; printf "%.*s%s\n", len, "00000000", $0}')
 oct4binary=$(bc <<<"obase=2;$oct4" | awk '{ len = (8 - length % 8) % 8; printf "%.*s%s\n", len, "00000000", $0}')
 
