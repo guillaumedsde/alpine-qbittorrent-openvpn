@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv sh
+# shellcheck shell=sh
 
 # extract docker network CIDR notation
 DECTECTED_DOCKER_CIDR=$(ip -o -f inet addr show | awk '/scope global/ {print $4}')
@@ -33,7 +34,7 @@ if [ -z "${VPN_PROTO}" ] || [ -z "${VPN_PORT}" ]; then
 fi
 
 # change openvpn config 'tcp-client' to compatible iptables 'tcp'
-if [ "${VPN_PROTO}" == "tcp-client" ]; then
+if [ "${VPN_PROTO}" = "tcp-client" ]; then
     export VPN_PROTO="tcp"
 fi
 

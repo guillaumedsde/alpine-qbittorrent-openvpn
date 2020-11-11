@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv sh
-
+# shellcheck shell=sh
 port="$1"
 
 QBT_CONFIG_FILE="${CONFIG_DIR}/qBittorrent/config/qBittorrent.conf"
@@ -15,7 +15,7 @@ if [ -f "$QBT_CONFIG_FILE" ]; then
     fi
 else
     # Ensure config directory is created
-    mkdir -p $(dirname "$QBT_CONFIG_FILE")
+    mkdir -p "$(dirname "$QBT_CONFIG_FILE")"
     # Create the configuration file from a template and environment variables
     printf "[Preferences]\nConnection\\PortRangeMin=\'$port\'\n" >"$QBT_CONFIG_FILE"
 fi
