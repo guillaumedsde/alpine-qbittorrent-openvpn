@@ -41,12 +41,14 @@ else
 
     # Download all OpenVPN configurations from this provider
     (
+        # shellcheck disable=SC2164
         cd "/etc/openvpn"
         svn export "https://github.com/haugene/docker-transmission-openvpn.git/trunk/openvpn/${lowercase_openvpn_provider}" --force
     )
 
     if [ -x "/etc/openvpn/${lowercase_openvpn_provider}/configure-openvpn.sh" ]; then
         echo "Provider ${OPENVPN_PROVIDER} has a custom startup script, executing it"
+        # shellcheck disable=SC1090
         VPN_PROVIDER_HOME="/etc/openvpn/${lowercase_openvpn_provider}" . "/etc/openvpn/${lowercase_openvpn_provider}/configure-openvpn.sh"
     fi
 
