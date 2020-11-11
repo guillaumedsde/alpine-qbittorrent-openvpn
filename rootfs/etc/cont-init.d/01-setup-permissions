@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv sh
+# shellcheck shell=sh
 
 # create configuration directory
 s6-mkdir -p "${CONFIG_DIR}/qBittorrent"
@@ -13,5 +14,6 @@ chown -R "${PUID}:${PGID}" "${QBT_SAVE_PATH}"
 
 # set permissions on copied scripts
 chmod 755 /usr/sbin/*
+chmod 755 /etc/openvpn/modify-openvpn-config.sh
 
 echo "nameserver ${DNS}" >/etc/resolv.conf
