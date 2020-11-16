@@ -23,6 +23,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 
 COPY build/install_*.sh /
 
+# hadolint ignore=DL3018
 RUN addgroup -S openvpn \
     && adduser -SD \
     -s /sbin/nologin \

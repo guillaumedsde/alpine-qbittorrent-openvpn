@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv sh
+# shellcheck shell=sh
 
 # Settings
 
@@ -13,7 +14,7 @@ new_client_id() {
 }
 
 pia_client_id="$(cat ${pia_client_id_file} 2>/dev/null)"
-if [[ -z "${pia_client_id}" ]]; then
+if [ -z "${pia_client_id}" ]; then
     echo "Generating new client id for PIA"
     pia_client_id=$(new_client_id)
 fi
@@ -25,27 +26,27 @@ pia_curl_exit_code=$?
 
 # error 52 is empty response, probably happens when Port forwarding is already enabled
 # so it is tolerated here
-if [[ -z "$pia_response" ]]; then
+if [ -z "$pia_response" ]; then
     echo "Port forwarding is already activated on this connection, has expired, or you are not connected to a PIA region that supports port forwarding"
     exit 0
 fi
 
 # Check for curl error (curl will fail on HTTP errors with -f flag)
-if [[ ${pia_curl_exit_code} -ne 0 ]]; then
+if [ ${pia_curl_exit_code} -ne 0 ]; then
     echo "curl encountered an error looking up new port: $pia_curl_exit_code"
     exit
 fi
 
 # Check for errors in PIA response
 error=$(echo "$pia_response" | grep -oE "\"error\".*\"")
-if [[ ! -z "$error" ]]; then
+if [ ! -z "$error" ]; then
     echo "PIA returned an error: $error"
     exit
 fi
 
 # Get new port, check if empty
 new_port=$(echo "$pia_response" | grep -oE "[0-9]+")
-if [[ -z "$new_port" ]]; then
+if [ -z "$new_port" ]; then
     echo "Could not find new port from PIA"
     exit
 fi

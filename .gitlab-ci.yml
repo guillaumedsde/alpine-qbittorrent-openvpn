@@ -1,9 +1,24 @@
 stages:
+  - test
   - build
   - deploy
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
+
+lint_dockerfile:
+  image: hadolint/hadolint:latest-debian
+  stage: test
+  script:
+    - hadolint Dockerfile
+
+shellcheck:
+  image: koalaman/shellcheck-alpine:stable
+  stage: test
+  before_script:
+    - shellcheck --version
+  script:
+    - shellcheck **/*.sh  # path to your shell scripts
 
 build:
   image: registry.gitlab.com/ix.ai/docker-buildx-qemu:latest

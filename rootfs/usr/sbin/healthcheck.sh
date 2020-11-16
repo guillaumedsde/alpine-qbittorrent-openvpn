@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv sh
+# shellcheck shell=sh
 
 # Taken from https://github.com/haugene/docker-transmission-openvpn/blob/master/scripts/healthcheck.sh
 

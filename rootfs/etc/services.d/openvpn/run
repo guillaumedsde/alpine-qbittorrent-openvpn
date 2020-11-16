@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv sh
-
+# shellcheck shell=sh
 # given a cidr subnet, transform it to subnet mask
 # Taken from https://forum.archive.openwrt.org/viewtopic.php?id=47986&p=1#p220781
 cdr2mask() {
