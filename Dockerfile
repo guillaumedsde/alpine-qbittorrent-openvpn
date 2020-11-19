@@ -37,6 +37,7 @@ RUN addgroup -S openvpn \
     libcap \
     sudo \
     subversion \
+    jq \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
