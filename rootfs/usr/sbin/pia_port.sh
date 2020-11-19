@@ -6,8 +6,8 @@
 curl_max_time=15
 curl_retry=5
 curl_retry_delay=15
-user=$(sed -n 1p /config/openvpn-credentials.txt)
-pass=$(sed -n 2p /config/openvpn-credentials.txt)
+user=$(sed -n 1p /config/openvpn/openvpn-credentials.txt)
+pass=$(sed -n 2p /config/openvpn/openvpn-credentials.txt)
 pf_host=$(ip route | grep tun | grep -v src | head -1 | awk '{ print $3 }')
 ###### Nextgen PIA port forwarding      ##################
    
