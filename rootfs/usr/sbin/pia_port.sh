@@ -22,7 +22,7 @@ get_auth_token () {
 
 get_auth_token
 
-yes '' | sed 3q
+yes ''>/dev/null | sed 3q
 
 get_sig () {
   pf_getsig=$(curl --insecure --get --silent --show-error \
