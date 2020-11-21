@@ -3,4 +3,3 @@
 
 # Allow files and directories
 !rootfs/
-!build/install_*.sh

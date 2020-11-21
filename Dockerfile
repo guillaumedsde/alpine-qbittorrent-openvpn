@@ -21,7 +21,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0"
 
-COPY build/install_*.sh /
+COPY rootfs /
 
 # hadolint ignore=DL3018
 RUN addgroup -S openvpn \
@@ -38,15 +38,12 @@ RUN addgroup -S openvpn \
     sudo \
     subversion \
     jq \
+    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
+    s6-overlay \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && chmod +x /install_*.sh \
-    && /install_s6.sh \
-    && /install_qbittorrent.sh \
-    && rm /install_*.sh
-
-COPY rootfs /
+    && /bin/sh /usr/sbin/install_qbittorrent.sh
 
 ENV CONFIG_DIR=/config \
     QBT_SAVE_PATH=/downloads \
