@@ -51,7 +51,7 @@ build:
       - .gitlab-ci.yml
       - build/**/*
   tags:
-    - docker
+    - dind
     - wopr
 
 # the 'pages' job will deploy and build your site to the 'public' path
