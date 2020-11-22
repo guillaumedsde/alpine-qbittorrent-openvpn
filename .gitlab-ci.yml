@@ -51,8 +51,8 @@ build:
       - .gitlab-ci.yml
       - build/**/*
   tags:
-    - dind
     - wopr
+    - dind
 
 # the 'pages' job will deploy and build your site to the 'public' path
 dockerhub-readme:
