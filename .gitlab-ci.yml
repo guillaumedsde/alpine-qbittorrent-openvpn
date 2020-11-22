@@ -27,9 +27,6 @@ build:
     - docker:dind
   retry: 2
   variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-    DOCKER_CERT_PATH: "/certs/client"
-    DOCKER_TLS: 'true'
     DOCKER_HOST: tcp://docker:2376/
     BUILDKIT_INLINE_CACHE: '1'
     DOCKER_DRIVER: overlay2
@@ -52,6 +49,9 @@ build:
       - rootfs/**/*
       - .gitlab-ci.yml
       - build/**/*
+  tags:
+    - docker
+    - wopr
 
 # the 'pages' job will deploy and build your site to the 'public' path
 dockerhub-readme:
