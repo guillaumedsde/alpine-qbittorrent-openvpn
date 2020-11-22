@@ -24,10 +24,11 @@ build:
   image: registry.gitlab.com/ix.ai/docker-buildx-qemu:latest
   stage: build
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: builder
   retry: 2
   variables:
-    DOCKER_HOST: tcp://docker:2376/
+    DOCKER_HOST: tcp://builder:2376/
     BUILDKIT_INLINE_CACHE: '1'
     DOCKER_DRIVER: overlay2
     BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le,linux/s390x
