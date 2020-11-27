@@ -37,7 +37,7 @@ $ docker run --cap-add=NET_ADMIN -d \
               -v /path/to/config/directory:/config \
               -v /etc/localtime:/etc/localtime:ro \
               -e OPENVPN_PROVIDER=PIA \
-              -e OPENVPN_CONFIG=CA\ Toronto \
+              -e OPENVPN_CONFIG=ca_toronto \
               -e OPENVPN_USERNAME=user \
               -e OPENVPN_PASSWORD=pass \
               -e PUID=1000 \
@@ -59,7 +59,7 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       - OPENVPN_PROVIDER=PIA
-      - OPENVPN_CONFIG=CA\
+      - OPENVPN_CONFIG=ca_toronto
       - OPENVPN_USERNAME=user
       - OPENVPN_PASSWORD=pass
       - PUID=1000
