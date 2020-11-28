@@ -9,27 +9,25 @@ DOCKER_CIDR="${DECTECTED_DOCKER_CIDR:-DOCKER_CIDR}"
 
 # extract VPN protocol, host and port from configuration
 CONFIG_PROTO=$(awk '/proto / { print $2 }' "${OPENVPN_CONFIG_FILE}")
-CONFIG_PORT=$(awk '/remote / { print $3 }' "${OPENVPN_CONFIG_FILE}")
-CONFIG_VPN_HOST=$(awk '/remote / { print $2 }' "${OPENVPN_CONFIG_FILE}")
+CONFIG_VPN_HOSTS_AND_PORTS="$(awk '/remote / { print $2 " " $3 }' "${OPENVPN_CONFIG_FILE}")"
 
 VPN_PROTO="${CONFIG_PROTO:='udp'}"
-VPN_HOST="${CONFIG_VPN_HOST}"
-VPN_PORT="${CONFIG_PORT:='1194'}"
+VPN_HOSTS_AND_PORTS="${CONFIG_VPN_HOSTS_AND_PORTS}"
 
 DNS_SERVER=${DNS}
 
 # Check that VPN information was sucessfully extracted from configuration
 
-if [ -z "${VPN_HOST}" ]; then
-    echo "ERROR could not find VPN_HOST in the VPN configuration"
+if [ -z "${VPN_HOSTS_AND_PORTS}" ]; then
+    echo "ERROR could not find VPN_HOSTS_AND_PORTS in the VPN configuration"
     exit 1
 fi
 
-if [ -z "${VPN_PROTO}" ] || [ -z "${VPN_PORT}" ]; then
-    echo "INFO: One of the following variables could not be detected in the VPN configuration, fell back to default:
+if [ -z "${VPN_PROTO}" ]; then
+    echo "INFO: the VPN protocol could not be detected, fell back to default:
     VPN_PROTO:  $VPN_PROTO
-    VPN_HOST:   $VPN_HOST
-    VPN_PORT:   $VPN_PORT
+    VPN_HOSTS_AND_PORTS:
+    $VPN_HOSTS_AND_PORTS
     "
 fi
 
@@ -70,8 +68,12 @@ iptables -A INPUT --src "${DOCKER_CIDR}" -j ACCEPT -i eth+
 iptables -A OUTPUT -d "${DOCKER_CIDR}" -j ACCEPT -o eth+
 
 # allow traffic with VPN host over VPN's port and with VPN's protocol
+echo "${VPN_HOSTS_AND_PORTS}" | while IFS= read -r line; do
+VPN_HOST=$(echo "${line}" | awk '{ print $1 }')
+VPN_PORT=$(echo "${line}" | awk '{ print $2 }')
 iptables -A OUTPUT -j ACCEPT -d "${VPN_HOST}" -o eth+ -p "${VPN_PROTO}" -m "${VPN_PROTO}" --dport "${VPN_PORT}"
 iptables -A INPUT -j ACCEPT -s "${VPN_HOST}" -i eth+ -p "${VPN_PROTO}" -m "${VPN_PROTO}" --sport "${VPN_PORT}"
+done
 
 # allow traffic through VPN tunnel interface
 iptables -A INPUT -j ACCEPT -i tun+
