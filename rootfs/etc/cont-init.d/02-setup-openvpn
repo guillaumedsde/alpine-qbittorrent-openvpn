@@ -4,13 +4,13 @@
 chmod 775 /config
 
 # create TUN device
-s6-mkdir -p /dev/net
+mkdir -p /dev/net
 if [ ! -c "${TUN}" ]; then
     mknod "${TUN}" c 10 200
 fi
 chmod 666 "${TUN}"
 
-s6-mkdir -p \
+mkdir -p \
     '/var/run/openvpn'
 chown -fR openvpn:openvpn \
     '/var/run/openvpn' || :
@@ -21,7 +21,7 @@ openvpn \
     --user openvpn --group openvpn
 
 # write credentials to file
-s6-mkdir -p "$(dirname "${CREDENTIALS_FILE}")"
+mkdir -p "$(dirname "${CREDENTIALS_FILE}")"
 echo "${OPENVPN_USERNAME}" >"${CREDENTIALS_FILE}"
 echo "${OPENVPN_PASSWORD}" >>"${CREDENTIALS_FILE}"
 

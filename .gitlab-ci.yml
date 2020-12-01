@@ -18,22 +18,20 @@ shellcheck:
   before_script:
     - shellcheck --version
   script:
-    - shellcheck **/*.sh  # path to your shell scripts
+    - shellcheck **/*.sh rootfs/etc/cont-init.d/* rootfs/etc/services.d/*/run  # path to your shell scripts
 
 build:
   image: registry.gitlab.com/ix.ai/docker-buildx-qemu:latest
   stage: build
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: builder
   retry: 2
   variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-    DOCKER_CERT_PATH: "/certs/client"
-    DOCKER_TLS: 'true'
-    DOCKER_HOST: tcp://docker:2376/
+    DOCKER_HOST: tcp://builder:2376/
     BUILDKIT_INLINE_CACHE: '1'
     DOCKER_DRIVER: overlay2
-    BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le
+    BUILDX_PLATFORM: linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le,linux/s390x
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel

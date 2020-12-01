@@ -1,22 +1,24 @@
 #!/usr/bin/with-contenv sh
 # shellcheck shell=sh
+
 # given a cidr subnet, transform it to subnet mask
 # Taken from https://forum.archive.openwrt.org/viewtopic.php?id=47986&p=1#p220781
 cdr2mask() {
     # Number of args to shift, 255..255, first non-255 byte, zeroes
     set -- $((5 - ($1 / 8))) 255 255 255 255 $(((255 << (8 - ($1 % 8))) & 255)) 0 0 0
-    [ $1 -gt 1 ] && shift $1 || shift
-    echo ${1-0}.${2-0}.${3-0}.${4-0}
+    # shellcheck disable=SC2015
+    [ "$1" -gt 1 ] && shift "$1" || shift
+    echo "${1-0}.${2-0}.${3-0}.${4-0}"
 }
 
 LAN_FIRST_IP=$(echo "${LAN}" | cut -d"/" -f1)
 LAN_SUBNET=$(echo "${LAN}" | cut -d"/" -f2)
-LAN_MASK=$(cdr2mask ${LAN_SUBNET})
+LAN_MASK=$(cdr2mask "${LAN_SUBNET}")
 
 # launch openvpn
 exec s6-setuidgid "$(id -u openvpn):$(id -g openvpn)" openvpn \
     --writepid /var/run/openvpn/pid \
-    --cd "$(dirname ${OPENVPN_CONFIG_FILE})" \
+    --cd "$(dirname "${OPENVPN_CONFIG_FILE}")" \
     --iproute /usr/sbin/ip-su \
     --dev tun0 --persist-tun \
     --config "${OPENVPN_CONFIG_FILE}" \
