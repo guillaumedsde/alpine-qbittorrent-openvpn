@@ -11,7 +11,9 @@ if [ "${ARCH}" = "x86_64" ]; then
 elif echo "${ARCH}" | grep -E -q "armv6|armv7"; then
     qbit_arch="arm"
 elif echo "${ARCH}" | grep -E -q "aarch64_be|aarch64|armv8b|armv8l|arm64"; then
-    qbit_arch=arm64
+    qbit_arch="arm64"
+elif [ "${ARCH}" = "s390x" ]; then
+    qbit_arch="${ARCH}"
 fi
 
 if [ -n "$qbit_arch" ]; then
