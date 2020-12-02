@@ -3,8 +3,8 @@ set -x
 ARCH="$(uname -m)"
 echo "building for ${ARCH}"
 
-QBT_VERSION=4.3.0.1
-QBT_RELEASE=r4
+QBT_VERSION=4.3.1
+QBT_RELEASE=r0
 
 if [ "${ARCH}" = "x86_64" ]; then
     qbit_arch="amd64"
