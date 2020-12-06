@@ -23,15 +23,15 @@ fi
 echo "Network is up"
 
 #Service check
-#Expected output is 2 for both checks, 1 for process and 1 for grep
-OPENVPN=$(ps -ef | grep 'openvpn --writepid' | wc | awk '{print $1}')
-QBITTORRENT=$(ps -ef | grep 'qbittorrent-nox' | wc | awk '{print $1}')
+#Expected output is 1 for both checks
+OPENVPN=$(pgrep openvpn | wc -l)
+QBITTORRENT=$(pgrep qbittorrent-nox | wc -l)
 
-if [ "${OPENVPN}" -ne 2 ]; then
+if [[ ${OPENVPN} -ne 1 ]]; then
     echo "Openvpn process not running"
     exit 1
 fi
-if [ "${QBITTORRENT}" -ne 2 ]; then
+if [[ ${QBITTORRENT} -ne 1 ]]; then
     echo "qbittorrent-nox process not running"
     exit 1
 fi
