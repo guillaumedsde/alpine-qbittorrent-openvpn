@@ -4,14 +4,16 @@ ARCH="$(uname -m)"
 echo "building for ${ARCH}"
 
 QBT_VERSION=4.3.1
-QBT_RELEASE=r0
+QBT_RELEASE=r2
 
 if [ "${ARCH}" = "x86_64" ]; then
     qbit_arch="amd64"
 elif echo "${ARCH}" | grep -E -q "armv6|armv7"; then
     qbit_arch="arm"
 elif echo "${ARCH}" | grep -E -q "aarch64_be|aarch64|armv8b|armv8l|arm64"; then
-    qbit_arch=arm64
+    qbit_arch="arm64"
+elif echo "${ARCH}" | grep -E -q "s390|s390x"; then
+    qbit_arch="s390x"
 fi
 
 if [ -n "$qbit_arch" ]; then
