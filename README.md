@@ -111,7 +111,7 @@ This image has a couple of limitations:
 
 ## Enhancements
 
-[@reconman](https://github.com/reconman) suggests using [docker-autoheal](https://github.com/willfarrell/docker-autoheal) by ading the `autoheal=true` label to the container to automatically restart it when the container becomes unhealthy (qBittorrent or OpenVPN crashes).
+[@reconman](https://github.com/reconman) suggests using [docker-autoheal](https://github.com/willfarrell/docker-autoheal) by adding the `autoheal=true` label to the container to automatically restart it when the container becomes unhealthy (qBittorrent or OpenVPN crashes).
 
 ## 🙏 Credits
 
