@@ -28,6 +28,6 @@ elif [ "${OPENVPN_PROVIDER}" = "PRIVATEVPN" ]; then
 else
     echo "INFO: no port updater for provider ${OPENVPN_PROVIDER}"
 fi
-UMASK_SET=${UMASK_SET:-002}
-umask "$UMASK_SET"
+
+umask "${UMASK_SET:-002}"
 exec s6-setuidgid "${PUID}:${PGID}" qbittorrent-nox
