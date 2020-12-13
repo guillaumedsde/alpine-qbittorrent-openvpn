@@ -29,4 +29,5 @@ else
     echo "INFO: no port updater for provider ${OPENVPN_PROVIDER}"
 fi
 
+umask "${UMASK_SET:-002}"
 exec s6-setuidgid "${PUID}:${PGID}" qbittorrent-nox
