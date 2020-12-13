@@ -11,11 +11,11 @@ if [ -f "$QBT_CONFIG_FILE" ]; then
         sed -i -E 's/^.*\b(Connection.*PortRangeMin)\b.*$/Connection\\PortRangeMin='"$port"'/' "$QBT_CONFIG_FILE"
     else
         # add the line for configuring interface address to the qBittorrent config file
-        echo 'Connection\\PortRangeMin='"$port" >>"$QBT_CONFIG_FILE"
+        printf 'Connection\\PortRangeMin=%s' "$port" >>"$QBT_CONFIG_FILE"
     fi
 else
     # Ensure config directory is created
     mkdir -p "$(dirname "$QBT_CONFIG_FILE")"
     # Create the configuration file from a template and environment variables
-    printf "[Preferences]\nConnection\\PortRangeMin=\'$port\'\n" >"$QBT_CONFIG_FILE"
+    printf '[Preferences]\nConnection\\PortRangeMin=%s\n' "$port" >"$QBT_CONFIG_FILE"
 fi
