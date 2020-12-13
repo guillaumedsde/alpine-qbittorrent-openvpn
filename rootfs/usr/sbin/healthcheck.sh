@@ -27,11 +27,11 @@ echo "Network is up"
 OPENVPN=$(pgrep openvpn | wc -l)
 QBITTORRENT=$(pgrep qbittorrent-nox | wc -l)
 
-if [[ ${OPENVPN} -ne 1 ]]; then
+if [ "${OPENVPN}" -ne 1 ]; then
     echo "Openvpn process not running"
     exit 1
 fi
-if [[ ${QBITTORRENT} -ne 1 ]]; then
+if [ "${QBITTORRENT}" -ne 1 ]; then
     echo "qbittorrent-nox process not running"
     exit 1
 fi
