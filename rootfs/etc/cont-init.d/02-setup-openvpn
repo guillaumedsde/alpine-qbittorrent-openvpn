@@ -43,7 +43,7 @@ else
     (
         # shellcheck disable=SC2164
         cd "/etc/openvpn"
-        svn export "https://github.com/haugene/docker-transmission-openvpn.git/trunk/openvpn/${lowercase_openvpn_provider}" --force
+        svn export "https://github.com/haugene/docker-transmission-openvpn/tree/master/openvpn/${lowercase_openvpn_provider}" --force
     )
 
     if [ -x "/etc/openvpn/${lowercase_openvpn_provider}/configure-openvpn.sh" ]; then
