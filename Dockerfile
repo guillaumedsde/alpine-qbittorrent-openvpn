@@ -41,10 +41,11 @@ RUN addgroup -S openvpn \
     jq \
     && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
     s6-overlay \
+    && apk add --no-cache -X "http://dl-cdn.alpinelinux.org/alpine/edge/testing" \
+    qbittorrent-nox \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
-    && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && /bin/sh /usr/sbin/install_qbittorrent.sh
+    && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers
 
 ENV CONFIG_DIR=/config \
     QBT_SAVE_PATH=/downloads \
