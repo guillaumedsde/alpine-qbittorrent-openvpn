@@ -31,6 +31,7 @@ RUN addgroup -S openvpn \
     -G openvpn \
     openvpn \
     && apk add --no-cache \
+    bash \
     openvpn \
     curl \
     iptables \
