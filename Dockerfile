@@ -58,7 +58,7 @@ ENV CONFIG_DIR=/config \
     CREDENTIALS_FILE=/config/openvpn/openvpn-credentials.txt \
     S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
-HEALTHCHECK --interval=10s CMD chmod +x $(which healthcheck.sh) && healthcheck.sh
+HEALTHCHECK --interval=2s CMD chmod +x $(which healthcheck.sh) && healthcheck.sh
 
 EXPOSE 8080
 
