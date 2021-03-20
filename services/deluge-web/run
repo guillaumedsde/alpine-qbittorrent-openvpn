@@ -1,0 +1,2 @@
+#!/bin/sh
+su-exec deluge deluge-web -d -c /config
