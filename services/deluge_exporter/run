@@ -1,0 +1,2 @@
+#!/bin/sh
+DELUGE_CONFIG_DIR=/config/ su-exec deluge /opt/deluge_exporter/deluge_exporter.py
