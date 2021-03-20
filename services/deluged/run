@@ -1,0 +1,2 @@
+#!/bin/sh
+su-exec deluge deluged -d -c /config
