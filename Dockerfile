@@ -43,9 +43,31 @@ RUN addgroup -S openvpn \
     s6-overlay \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
-    && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && /bin/sh /usr/sbin/install_qbittorrent.sh
+    && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers #\
+#    && /bin/sh /usr/sbin/install_qbittorrent.sh
 
+# installing deluge per https://git.sbruder.de/docker/deluge/src/commit/b998b9bc3f79b5ca1276aa29cc491d5003f4479c
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories \
+    && apk add --no-cache \
+        deluge \
+        git \
+        nginx \
+        py3-pip \
+        runit \
+        su-exec \
+        tini
+RUN git clone --depth=1 https://github.com/tobbez/deluge_exporter /opt/deluge_exporter \
+    && cd /opt/deluge_exporter \
+    && pip3 install --no-cache-dir -r requirements.txt
+
+COPY services /etc/service
+COPY nginx.conf /etc/nginx/
+COPY entrypoint.sh /usr/local/bin/
+
+ENV PER_TORRENT_METRICS 1
+ENTRYPOINT ["entrypoint.sh"]
+
+#* need to figuree out what all are needed from below
 ENV CONFIG_DIR=/config \
     QBT_SAVE_PATH=/downloads \
     QBT_WEBUI_PORT=8080 \
