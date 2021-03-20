@@ -1,0 +1,3 @@
+#!/bin/sh
+rm -f /var/run/nginx.sock
+nginx -g 'daemon off;'
