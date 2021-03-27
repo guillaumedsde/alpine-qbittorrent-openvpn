@@ -76,7 +76,6 @@ services:
 
 This container is built for many hardware platforms (yes, even ppc64le whoever uses that... 😉):
 
-- linux/386
 - linux/amd64
 - linux/arm/v6
 - linux/arm/v7
@@ -84,6 +83,12 @@ This container is built for many hardware platforms (yes, even ppc64le whoever u
 - linux/ppc64le
 
 All you have to do is use a recent version of docker and it will pull the appropriate version of the image [guillaumedsde/alpine-qbittorrent-openvpn](https://hub.docker.com/repository/docker/guillaumedsde/alpine-qbittorrent-openvpn) from the docker hub.
+
+### ⚰️ Unsupported platforms
+
+The following platforms are no longer supported, often because they do not build anymore
+
+- linux/386 (Latest build: [`dd4cd24`](https://hub.docker.com/layers/guillaumedsde/alpine-qbittorrent-openvpn/dd4cd24/images/sha256-4a6c267a272681355a7c17fadfde01b761f3bed6ccc5eae7af840efd4ec33f87?context=repo))
 
 ## 🚇 OpenVPN configuration
 
