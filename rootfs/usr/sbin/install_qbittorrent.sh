@@ -4,7 +4,7 @@ ARCH="$(uname -m)"
 echo "building for ${ARCH}"
 
 QBT_VERSION=4.3.4.1
-QBT_RELEASE=r0
+QBT_RELEASE=r1
 
 if [ "${ARCH}" = "x86_64" ]; then
     qbit_arch="amd64"
