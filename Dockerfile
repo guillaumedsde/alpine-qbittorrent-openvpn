@@ -43,7 +43,8 @@ RUN addgroup -S openvpn \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && /bin/sh /usr/sbin/install_qbittorrent.sh
+    && /bin/sh /usr/sbin/install_qbittorrent.sh \
+    && chmod +x /usr/sbin/healthcheck.sh
 
 ENV CONFIG_DIR=/config \
     QBT_SAVE_PATH=/downloads \
@@ -58,7 +59,7 @@ ENV CONFIG_DIR=/config \
     CREDENTIALS_FILE=/config/openvpn/openvpn-credentials.txt \
     S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 
-HEALTHCHECK --interval=2s CMD chmod +x $(which healthcheck.sh) && healthcheck.sh
+HEALTHCHECK --interval=1s --start-period=5s CMD healthcheck.sh
 
 EXPOSE 8080
 
