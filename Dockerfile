@@ -39,6 +39,7 @@ RUN addgroup -S openvpn \
     sudo \
     subversion \
     jq \
+    unrar \
     && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
     s6-overlay \
     && setcap cap_net_admin+ep "$(which openvpn)" \
