@@ -33,7 +33,7 @@ build:
     DOCKER_HOST: tcp://docker:2376/
     BUILDKIT_INLINE_CACHE: "1"
     DOCKER_DRIVER: overlay2
-    BUILDX_PLATFORM: linux/amd64,linux/arm64,linux/s390x
+    BUILDX_PLATFORM: linux/amd64,linux/arm64
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin
     - update-binfmts --enable # Important: Ensures execution of other binary formats is enabled in the kernel
