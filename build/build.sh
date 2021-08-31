@@ -8,7 +8,7 @@ if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then
         --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
         --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
         --build-arg VERSION="python" \
-        --build-arg BASE_IMAGE="python:3-alpine3.13" \
+        --build-arg BASE_IMAGE="python:3-alpine3.14" \
         -t "${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:python" \
         --push
     TAGS=" -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:${VERSION} -t ${CI_REGISTRY_USER}/alpine-qbittorrent-openvpn:latest "
