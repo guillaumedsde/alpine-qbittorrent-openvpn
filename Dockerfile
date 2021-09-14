@@ -1,7 +1,6 @@
-
-ARG BASE_IMAGE="alpine:3.12"
+ARG BASE_IMAGE="alpine:3.14"
 # uncomment below to enable qbittorrent search engine
-# ARG BASE_IMAGE="python:3-alpine3.12"
+ARG BASE_IMAGE="python:3-alpine3.14"
 
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
@@ -39,8 +38,8 @@ RUN addgroup -S openvpn \
     sudo \
     subversion \
     jq \
-    && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
-    s6-overlay \
+    #&& apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
+    && apk add s6-overlay \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
