@@ -1,6 +1,6 @@
 ARG BASE_IMAGE="alpine:3.14"
 # uncomment below to enable qbittorrent search engine
-#ARG BASE_IMAGE="python:3-alpine3.14"
+ARG BASE_IMAGE="python:3-alpine3.14"
 
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
