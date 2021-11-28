@@ -17,7 +17,8 @@ done
 
 if [ "${OPENVPN_PROVIDER}" = "PIA" ]; then
     echo "INFO: configuring port forwarding for ${OPENVPN_PROVIDER}"
-    /usr/sbin/pia_port.sh
+    /usr/sbin/pia_port.sh &
+    sleep 5s
 # not currently implemented
 # elif [ "${OPENVPN_PROVIDER}" = "PERFECTPRIVACY" ]; then
 #     echo "CONFIGURING PORT FORWARDING"
