@@ -27,7 +27,6 @@ get_sig() {
   pf_getsig=$(curl --insecure --get --silent --show-error \
     --retry $curl_retry --retry-delay $curl_retry_delay --max-time $curl_max_time \
     --data-urlencode "token=$tok" \
-    "$verify" \
     "https://$pf_host:19999/getSignature")
   if [ "$(echo "$pf_getsig" | jq -r .status)" != "OK" ]; then
     echo "$(date): getSignature error"
@@ -50,7 +49,6 @@ bind_port() {
     --retry $curl_retry --retry-delay $curl_retry_delay --max-time $curl_max_time \
     --data-urlencode "payload=$pf_payload" \
     --data-urlencode "signature=$pf_getsignature" \
-    "$verify" \
     "https://$pf_host:19999/bindPort")
   if [ "$(echo "$pf_bind" | jq -r .status)" = "OK" ]; then
     echo "the port has been bound to $pf_port  $(date)"
@@ -63,16 +61,24 @@ bind_port() {
 
 get_sig
 
-#echo "sig is $pf_getsig"
-echo "port is $pf_port"
+while true; do
 
-bind_port
-# Get new port, check if empty
-new_port="$pf_port"
-if [ -z "$new_port" ]; then
-  echo "Could not find new port from PIA"
-  exit
-fi
-echo "Got new port $new_port from PIA"
+  echo "sig is $pf_getsig"
+  echo "port is $pf_port"
 
-/usr/sbin/set_qbittorrent_port_forwarding.sh "${new_port}"
+  bind_port
+  # Get new port, check if empty
+  new_port="$pf_port"
+  if [ -z "$new_port" ]; then
+    echo "Could not find new port from PIA"
+    exit
+  fi
+  echo "Got new port $new_port from PIA"
+  expires_at="$(echo "$pf_payload" | base64 -d | jq -r '.expires_at')"
+  echo -e Refreshed on'\t'${GREEN}$(date)${NC}
+  echo -e Expires on'\t'${RED}$(echo "$expires_at")${NC}
+
+  /usr/sbin/set_qbittorrent_port_forwarding.sh "${new_port}"
+
+  sleep 900
+done

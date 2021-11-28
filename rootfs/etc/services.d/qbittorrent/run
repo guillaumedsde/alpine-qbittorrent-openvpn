@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv sh
 # shellcheck shell=sh
-export QBT_PROFILE=${CONFIG_DIR}
+export QBT_PROFILE="${CONFIG_DIR}"
 
 # wait for VPN connection
 until ifconfig | grep tun | grep -q "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00"; do
@@ -17,7 +17,8 @@ done
 
 if [ "${OPENVPN_PROVIDER}" = "PIA" ]; then
     echo "INFO: configuring port forwarding for ${OPENVPN_PROVIDER}"
-    /usr/sbin/pia_port.sh
+    /usr/sbin/pia_port.sh &
+    sleep 5s
 # not currently implemented
 # elif [ "${OPENVPN_PROVIDER}" = "PERFECTPRIVACY" ]; then
 #     echo "CONFIGURING PORT FORWARDING"
