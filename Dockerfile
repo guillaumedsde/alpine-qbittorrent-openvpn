@@ -23,8 +23,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 COPY rootfs /
 
 # hadolint ignore=DL3018
-RUN apk update \ 
-    && addgroup -S openvpn \
+RUN addgroup -S openvpn \
     && adduser -SD \
     -s /sbin/nologin \
     -g openvpn \
