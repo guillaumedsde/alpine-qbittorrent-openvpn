@@ -46,7 +46,6 @@ RUN addgroup -S openvpn \
     && chmod +x /usr/sbin/healthcheck.sh
 
 ENV CONFIG_DIR=/config \
-    SCRIPTS_DIR=/config/scripts \
     QBT_SAVE_PATH=/downloads \
     QBT_WEBUI_PORT=8080 \
     TUN=/dev/net/tun \
