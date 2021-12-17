@@ -28,3 +28,4 @@ exec s6-setuidgid "$(id -u openvpn):$(id -g openvpn)" openvpn \
     --dhcp-option DNS "${DNS}" \
     --redirect-gateway def1 bypass-dhcp \
     --route "${LAN_FIRST_IP}" "${LAN_MASK}" net_gateway
+    --script-security 2 --up-delay --up /usr/sbin/tunnelUp.sh --down /usr/sbin/tunnelDown.sh

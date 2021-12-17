@@ -30,5 +30,24 @@ else
     echo "INFO: no port updater for provider ${OPENVPN_PROVIDER}"
 fi
 
+
+if [[ -x ${SCRIPTS_DIR}/preQBittorrentStart.sh ]]; then
+  echo "Executing ${SCRIPTS_DIR}/preQBittorrentStart.sh"
+  ${SCRIPTS_DIR}/preQBittorrentStart.sh 
+  echo "${SCRIPTS_DIR}/preQBittorrentStart.sh returned $?"
+else
+    echo "${SCRIPTS_DIR}/preQBittorrentStart.sh does not exist."
+fi
+
+
 umask "${UMASK_SET:-002}"
 exec s6-setuidgid "${PUID}:${PGID}" qbittorrent-nox
+
+
+if [[ -x ${SCRIPTS_DIR}/postQBittorrentStart.sh ]]; then
+  echo "Executing ${SCRIPTS_DIR}/postQBittorrentStart.sh"
+  ${SCRIPTS_DIR}/postQBittorrentStart.sh 
+  echo "${SCRIPTS_DIR}/postQBittorrentStart.sh returned $?"
+else
+    echo "${SCRIPTS_DIR}/preQBittorrentStart.sh does not exist."
+fi
