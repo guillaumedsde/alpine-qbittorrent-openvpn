@@ -8,7 +8,6 @@ mkdir -p "${QBT_SAVE_PATH}"
 # set permissions on configuration directory
 echo "${CONFIG_DIR}/qBittorrent true ${PUID}:${PGID} 0600 0700" | fix-attrs
 echo "${CONFIG_DIR}/openvpn true openvpn:openvpn 0600 0700" | fix-attrs
-echo "/scripts true openvpn:openvpn 0600 0700" | fix-attrs
 
 # set ownership on download directory
 chown -R "${PUID}:${PGID}" "${QBT_SAVE_PATH}"
