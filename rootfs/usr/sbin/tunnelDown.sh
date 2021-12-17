@@ -5,5 +5,5 @@ if [[ -x /${SCRIPTS_DIR}tunnelDown.sh ]]; then
   /${SCRIPTS_DIR}tunnelDown.sh 
   echo "/${SCRIPTS_DIR}tunnelDown.sh returned $?"
 else
-    echo "${SCRIPTS_DIR}/tunnelDown.sh does not exist."
+  echo "${SCRIPTS_DIR}/tunnelDown.sh does not exist."
 fi
