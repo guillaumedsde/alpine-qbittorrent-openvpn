@@ -3,6 +3,8 @@
 
 # extract docker network CIDR notation
 DECTECTED_DOCKER_CIDR=$(ip -o -f inet addr show | awk '/scope global/ {print $4}')
+# if there are multiple networks, convert the list to a comma-separated string
+DECTECTED_DOCKER_CIDR="${DECTECTED_DOCKER_CIDR//$'\n'/,}"
 
 # fallback to DOCKER_CIDR if no DECTECTED_DOCKER_CIDR
 DOCKER_CIDR="${DECTECTED_DOCKER_CIDR:-DOCKER_CIDR}"
@@ -63,7 +65,8 @@ iptables -A INPUT -p tcp -s "${DNS_SERVER}" --sport 53 -m state --state ESTABLIS
 iptables -A INPUT --src "${LAN}" -j ACCEPT -i eth+
 iptables -A OUTPUT -d "${LAN}" -j ACCEPT -o eth+
 
-# allow traffic with other containers on docker network
+# allow traffic with other containers on docker networks
+echo "INFO: Configuring Docker networks: ${DOCKER_CIDR}"
 iptables -A INPUT --src "${DOCKER_CIDR}" -j ACCEPT -i eth+
 iptables -A OUTPUT -d "${DOCKER_CIDR}" -j ACCEPT -o eth+
 
