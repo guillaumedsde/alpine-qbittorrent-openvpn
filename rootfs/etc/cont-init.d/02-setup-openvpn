@@ -48,8 +48,9 @@ else
 
     if [ -x "/etc/openvpn/${lowercase_openvpn_provider}/configure-openvpn.sh" ]; then
         echo "Provider ${OPENVPN_PROVIDER} has a custom startup script, executing it"
-
+        # shellcheck disable=SC2034
         VPN_PROVIDER_HOME="/etc/openvpn/${lowercase_openvpn_provider}"
+        # shellcheck disable=SC1090
         . "/etc/openvpn/${lowercase_openvpn_provider}/configure-openvpn.sh"
     fi
 
