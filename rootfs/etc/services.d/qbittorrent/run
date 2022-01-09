@@ -32,11 +32,11 @@ fi
 
 
 if [[ -x /scripts/preQBittorrentStart.sh ]]; then
-  echo "Executing /scripts/preQBittorrentStart.sh"
+  echo "INFO: Executing /scripts/preQBittorrentStart.sh"
   /scripts/preQBittorrentStart.sh 
-  echo "/scripts/preQBittorrentStart.sh returned $?"
+  echo "INFO: /scripts/preQBittorrentStart.sh returned $?"
 else
-    echo "/scripts/preQBittorrentStart.sh does not exist."
+    echo "INFO: /scripts/preQBittorrentStart.sh does not exist."
 fi
 
 
