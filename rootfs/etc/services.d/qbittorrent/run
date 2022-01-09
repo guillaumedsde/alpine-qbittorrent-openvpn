@@ -45,9 +45,9 @@ exec s6-setuidgid "${PUID}:${PGID}" qbittorrent-nox
 
 
 if [[ -x /scripts/postQBittorrentStart.sh ]]; then
-  echo "Executing /scripts/postQBittorrentStart.sh"
+  echo "INFO: Executing /scripts/postQBittorrentStart.sh"
   /scripts/postQBittorrentStart.sh 
-  echo "/scripts/postQBittorrentStart.sh returned $?"
+  echo "INFO: /scripts/postQBittorrentStart.sh returned $?"
 else
-    echo "/scripts/preQBittorrentStart.sh does not exist."
+  echo "INFO: /scripts/preQBittorrentStart.sh does not exist."
 fi
