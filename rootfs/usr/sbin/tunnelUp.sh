@@ -1,11 +1,13 @@
 #!/bin/bash
 
-echo "INFO: VPN connection is UP"
-
-if [[ -x /scripts/tunnelUp.sh ]]; then
-  echo "INFO: Executing scripts/tunnelUp.sh"
-  /scripts/tunnelUp.sh 
-  echo "INFO: /scripts/tunnelUp.sh returned $?"
+if [[ -v TUNNELUP ]]; then
+  if [[ -x $TUNNELUP ]]; then
+    echo "INFO: Executing $TUNNELUP..."
+    $TUNNELUP
+    echo "INFO: $TUNNELUP returned $?"
+  else 
+    echo "WARNING: Variable TUNNELUP defined, but no executable file found at $TUNNELUP..."
+  fi
 else
-  echo "INFO: /scripts/tunnelUp.sh does not exist."
+  echo "INFO: TUNNELUP not defined."
 fi

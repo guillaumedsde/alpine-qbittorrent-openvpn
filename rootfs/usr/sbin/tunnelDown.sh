@@ -1,9 +1,13 @@
 #!/bin/bash
 
-if [[ -x /scripts/tunnelDown.sh ]]; then
-  echo "INFO: Executing /scripts/tunnelDown.sh"
-  /scripts/tunnelDown.sh 
-  echo "INFO: /scripts/tunnelDown.sh returned $?"
+if [[ -v TUNNELDOWN ]]; then
+  if [[ -x $TUNNELDOWN ]]; then
+    echo "INFO: Executing $TUNNELDOWN..."
+    $TUNNELDOWN
+    echo "INFO: $TUNNELDOWN returned $?"
+  else 
+    echo "WARNING: Variable TUNNELDOWN defined, but no executable file found at $TUNNELDOWN..."
+  fi
 else
-  echo "INFO: /scripts/tunnelDown.sh does not exist."
+  echo "INFO: TUNNELDOWN not defined."
 fi
