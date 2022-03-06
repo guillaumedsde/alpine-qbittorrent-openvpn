@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "${CI_COMMIT_REF_NAME}" = "master" ]; then
+if [ "${CI_COMMIT_REF_PROTECTED}" = "true" ]; then
     VERSION="$(git rev-parse --short HEAD)"
     # build python version
     docker buildx build . \
