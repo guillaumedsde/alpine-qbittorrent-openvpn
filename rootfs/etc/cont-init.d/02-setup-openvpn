@@ -82,7 +82,7 @@ if [ -n "${MSSFIX_OVERRIDE}" ]; then
 		sed -i -e 's/mssfix [0-9]*/mssfix ${MSSFIX_OVERRIDE}/' "${OPENVPN_CONFIG_FILE}"
 	else
 		# Add line for mssfix value
-		printf 'mssfix' "${MSSFIX_OVERRIDE}" >>"${OPENVPN_CONFIG_FILE}"
+		printf 'mssfix %s' "${MSSFIX_OVERRIDE}" >>"${OPENVPN_CONFIG_FILE}"
 	fi
 fi
 
