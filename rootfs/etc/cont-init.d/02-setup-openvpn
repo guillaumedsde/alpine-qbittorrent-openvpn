@@ -75,7 +75,7 @@ else
     cp -p "${DOWNLOADED_OPENVPN_CONFIG_FILE}" "${OPENVPN_CONFIG_FILE}"
 fi
 
-if [ -z "${MSSFIX_OVERRIDE}" ]; then
+if [ -n "${MSSFIX_OVERRIDE}" ]; then
 	# If mssfix line exists
 	if grep -q 'mssfix' "${OPENVPN_CONFIG_FILE}"; then
 		# Override existing value
