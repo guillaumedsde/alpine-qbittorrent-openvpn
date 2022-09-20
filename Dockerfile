@@ -39,12 +39,12 @@ RUN addgroup -S openvpn \
         sudo \
         subversion \
         jq \
-    && apk add --no-cache s6-overlay \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
     && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >>/etc/sudoers \
-    && /bin/sh /usr/sbin/install_qbittorrent.sh \
-    && chmod +x /usr/sbin/healthcheck.sh
+    && chmod 755 /usr/sbin/* \
+    && /bin/sh /usr/sbin/install_s6.sh \
+    && /bin/sh /usr/sbin/install_qbittorrent.sh
 
 ENV CONFIG_DIR=/config \
     QBT_SAVE_PATH=/downloads \
