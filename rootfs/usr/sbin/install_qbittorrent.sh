@@ -3,8 +3,8 @@ set -x
 ARCH="$(uname -m)"
 echo "building for ${ARCH}"
 
-QBITTORRENT_VERSION=4.4.2
-LIBTORRENT_VERSION=v2.0.5
+QBITTORRENT_VERSION=4.4.5
+LIBTORRENT_VERSION=v2.0.7
 
 if [ "${ARCH}" = "x86_64" ]; then
     qbit_arch="x86_64"

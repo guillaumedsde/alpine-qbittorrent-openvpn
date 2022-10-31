@@ -21,7 +21,7 @@ shellcheck:
     - shellcheck **/*.sh rootfs/etc/cont-init.d/* rootfs/etc/services.d/*/run # path to your shell scripts
 
 build:
-  image: registry.gitlab.com/ix.ai/docker-buildx-qemu:latest
+  image: ixdotai/docker-buildx-qemu:latest
   stage: build
   services:
     - docker:dind

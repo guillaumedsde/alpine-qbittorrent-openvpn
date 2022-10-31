@@ -1,6 +1,6 @@
-ARG BASE_IMAGE="alpine:3.15"
+ARG BASE_IMAGE="alpine:3.16"
 # uncomment below to enable qbittorrent search engine
-# ARG BASE_IMAGE="python:3-alpine3.15"
+# ARG BASE_IMAGE="python:3.8-alpine3.16"
 
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
@@ -25,26 +25,26 @@ COPY rootfs /
 # hadolint ignore=DL3018
 RUN addgroup -S openvpn \
     && adduser -SD \
-    -s /sbin/nologin \
-    -g openvpn \
-    -G openvpn \
-    openvpn \
+        -s /sbin/nologin \
+        -g openvpn \
+        -G openvpn \
+        openvpn \
     && apk add --no-cache \
-    bash \
-    bind-tools \
-    openvpn \
-    curl \
-    iptables \
-    libcap \
-    sudo \
-    subversion \
-    jq \
-    && apk add --no-cache s6-overlay \
+        bash \
+        bind-tools \
+        openvpn \
+        curl \
+        iptables \
+        libcap \
+        sudo \
+        subversion \
+        jq \
     && setcap cap_net_admin+ep "$(which openvpn)" \
     && apk del libcap --purge \
-    && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >> /etc/sudoers \
-    && /bin/sh /usr/sbin/install_qbittorrent.sh \
-    && chmod +x /usr/sbin/healthcheck.sh
+    && echo "openvpn ALL=(ALL)  NOPASSWD: /sbin/ip" >>/etc/sudoers \
+    && chmod 755 /usr/sbin/* \
+    && /bin/sh /usr/sbin/install_s6.sh \
+    && /bin/sh /usr/sbin/install_qbittorrent.sh
 
 ENV CONFIG_DIR=/config \
     QBT_SAVE_PATH=/downloads \
