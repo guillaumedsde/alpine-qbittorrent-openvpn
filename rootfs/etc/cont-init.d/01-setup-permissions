@@ -1,6 +1,15 @@
 #!/usr/bin/with-contenv sh
 # shellcheck shell=sh
 
+echo
+echo
+echo "############################"
+echo "DEPRECATION WARNING"
+echo "This image is deprecated it has important SECURITY ISSUE, see:"
+echo "https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/137"
+echo 
+echo
+
 # create configuration directory
 mkdir -p "${CONFIG_DIR}/qBittorrent"
 mkdir -p "${QBT_SAVE_PATH}"

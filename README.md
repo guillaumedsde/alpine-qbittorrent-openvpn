@@ -11,6 +11,24 @@
 [![Docker Stars](https://img.shields.io/docker/stars/guillaumedsde/alpine-qbittorrent-openvpn)](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn)
 [![GitHub](https://img.shields.io/github/license/guillaumedsde/alpine-qbittorrent-openvpn)](https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/blob/master/LICENSE.md)
 
+```
+DEPRECATION NOTICE
+
+I no longer have time to maintain this project.
+
+This project has served me well for a while, but has important SECURITY ISSUES that I no longer have time to fix:
+
+https://github.com/guillaumedsde/alpine-qbittorrent-openvpn/issues/137
+
+
+I would advise migrating to another solution for running a containerized qbittorrent with a VPN tunnel such as:
+
+https://github.com/qdm12/gluetun
+
+I will leave this repository up for archival purposes and will add a disclaimer to the docker image at launch.
+
+```
+
 This repository contains the code to build a docker container with the [qBittorrent](https://www.qbittorrent.org/) torrent client with all traffic routed through an OpenVPN tunnel with firewall rules preventing traffic outside of the tunnel.
 The container is built automatically whenever the Alpine container is updated, the final image is available on the [docker hub](https://hub.docker.com/r/guillaumedsde/alpine-qbittorrent-openvpn) and the documentation is hosted on [gitlab pages](https://guillaumedsde.gitlab.io/alpine-qbittorrent-openvpn/).
 
