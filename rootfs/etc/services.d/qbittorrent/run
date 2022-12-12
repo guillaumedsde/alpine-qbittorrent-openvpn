@@ -30,5 +30,17 @@ else
     echo "INFO: no port updater for provider ${OPENVPN_PROVIDER}"
 fi
 
+if [[ -v PRESTART ]]; then
+  if [[ -x $PRESTART ]]; then
+    echo "INFO: Executing $PRESTART..."
+    $PRESTART
+    echo "INFO: $PRESTART returned $?"
+  else 
+    echo "WARNING: Variable PRESTART defined, but no executable file found at $PRESTART..."
+  fi
+else
+  echo "INFO: PRESTART not defined."
+fi
+
 umask "${UMASK_SET:-002}"
 exec s6-setuidgid "${PUID}:${PGID}" qbittorrent-nox
